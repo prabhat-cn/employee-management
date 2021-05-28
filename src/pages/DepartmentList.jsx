@@ -1,7 +1,12 @@
 import React, {useState, useEffect} from 'react'
-import { Button, Modal } from 'antd';
-
+import Avatar from 'react-avatar'
+import { Button, Modal, Input } from 'antd';
 import API from '../api';
+
+const { Search } = Input;
+
+const onSearch = value => console.log(value);
+
 
 const DepartmentList = () => {
 
@@ -56,30 +61,38 @@ const DepartmentList = () => {
       <Modal title="View Department" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <h2>{singleDepartment.name}</h2>
       </Modal>
-      <table class="table">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Name</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {department.map((m) => (
-            <tr key={m._id}>
-              <td scope="row">{m._id}</td>
-              <td>{m.name}</td>
-              <td>
-                <Button type="primary" onClick={() => viewDetail(m._id)}>
-                  View Details
-                </Button>
-              </td>
+
+      <div className="container">
+        <div className="row">
+          <div className="col-md-6"><h2>Department List</h2></div>
+          <div className="col-md-6"><Search placeholder="input search text" onSearch={onSearch} enterButton /></div>
+        </div>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Id</th>
+              <th scope="col">Department Name</th>
+              <th scope="col">Action</th>
             </tr>
-          ))}
-          
-        </tbody>
-    </table>
-  </>
+          </thead>
+          <tbody>
+            {department.map((m) => (
+              <tr key={m._id}>
+                <td scope="row">{m._id}</td>
+                <td>
+                <Avatar className="mr-2" name={m.name} size="45" round={true} /> {m.name}</td>
+                <td>
+                  <Button type="primary" onClick={() => viewDetail(m._id)}>
+                    View Details
+                  </Button>
+                </td>
+              </tr>
+            ))}
+            
+          </tbody>
+        </table>
+      </div>
+    </>
   )
 }
 
