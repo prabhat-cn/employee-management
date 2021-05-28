@@ -4,8 +4,6 @@ import { Button, Modal, Input } from 'antd';
 import API from '../api';
 
 
-
-
 const DepartmentList = () => {
 
   const [department, setDepartment] = useState([]);

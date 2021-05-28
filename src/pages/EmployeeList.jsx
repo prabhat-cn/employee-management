@@ -3,9 +3,6 @@ import { Button, Modal, Input } from 'antd';
 import Avatar from 'react-avatar'
 import API from '../api';
 
-const { Search } = Input;
-
-const onSearch = value => console.log(value);
 
 
 const EmployeeList = () => {
@@ -14,6 +11,10 @@ const EmployeeList = () => {
   const [singleEmployee, setSingleEmployee] = useState({name: '', _id: ''});
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+    // Search
+    const[search, setSearch] = useState("");
+    const[query, setQuery] = useState('name')
 
   const getEmployee = async () => {
     setLoading(true);
@@ -54,7 +55,19 @@ const EmployeeList = () => {
 
   useEffect(() => {
     getEmployee();
-  }, []);
+  }, [query]);
+
+  const updateSearch = (evt) => {
+    setSearch(evt.target.value);
+  };
+
+  const getSearch = (e) => {
+    e.preventDefault();
+    setQuery(search);
+    // to reset after search button click
+    setSearch('');
+    
+  };
   
   return (
     <>
@@ -65,7 +78,31 @@ const EmployeeList = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-6"><h2>Employee List</h2></div>
-          <div className="col-md-6"><Search placeholder="input search text" onSearch={onSearch} enterButton /></div>
+          <div className="col-md-6">
+          <form onSubmit={getSearch} className="search-form">
+              <input 
+                class="form-control me-sm-2" 
+                placeholder="Search department"
+                style={{
+                  height: "40px",
+                  display: "initial",
+                  padding: "0 5px", 
+                  width: "70%", 
+                  fontSize:"14px"
+                }}
+                type="text"
+                value={search} 
+                onChange={updateSearch} 
+              />
+
+              <button class="btn btn-primary my-2 my-sm-0" 
+              style={{
+                height: "40px",
+                padding: "0 5px",
+                width: "20%",
+              }} type="submit">Search</button>
+            </form> 
+          </div>
         </div>
         <table className="table">
           <thead className="thead-dark">
@@ -76,7 +113,18 @@ const EmployeeList = () => {
             </tr>
           </thead>
           <tbody>
-            {employee.map((m) => (
+            {employee.filter((val) => {
+                if(search === ""){
+                    return val
+                }
+                else if(val.name.toLowerCase().includes(search.toLowerCase())){
+                    return val
+                }
+                else if(val.search){
+                    return val
+                }
+
+            }).map((m) => (
               <tr key={m._id}>
                 <td scope="row">{m._id}</td>
                 <td>
