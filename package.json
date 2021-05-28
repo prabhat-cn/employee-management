@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^12.8.3",
     "antd": "^4.16.0",
     "axios": "^0.21.1",
+    "axios-retry": "^3.1.9",
     "bootstrap": "^5.0.1",
     "history": "^5.0.0",
     "lodash": "^4.17.21",

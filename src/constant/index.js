@@ -1,0 +1,1 @@
+export const apiHost = 'https://officeemployee.herokuapp.com/api';
