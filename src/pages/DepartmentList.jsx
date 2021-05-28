@@ -87,7 +87,7 @@ export class DepartmentList extends Component {
 
                   });    
 
-                });    
+                });     
 
               }   
 
