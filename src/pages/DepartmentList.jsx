@@ -53,7 +53,7 @@ const DepartmentList = () => {
   
   return (
     <>
-      <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title="View Department" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <h2>{singleDepartment.name}</h2>
       </Modal>
       <table class="table">
