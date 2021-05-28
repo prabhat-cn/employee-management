@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
 import Avatar from 'react-avatar'
-import Loader from '../loader/Loader'
 import { Button, Modal, Input } from 'antd';
 import API from '../api';
 
