@@ -8,27 +8,23 @@ import API from '../api';
 
 const DepartmentList = () => {
 
+  const [ searchItem, setSearchItem ] = useState('');
+
   const [department, setDepartment] = useState([]);
   const [singleDepartment, setSingleDepartment] = useState({name: '', _id: ''});
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // Search
-  const[search, setSearch] = useState("");
-  const[query, setQuery] = useState('name')
-
- 
-
-  const getDepartment = async () =>{
+  const getDepartment = async () => {
     setLoading(true);
     try{
-    const deptData = await API.get('/department');
-    setDepartment(deptData.data.data);
-    setLoading(false);
+      const deptData = await API.get('/department');
+      setDepartment(deptData.data.data);
+      setLoading(false);
     }catch(error){
       console.log(error.message);
     }
-  }
+  };
 
   const getDepartmentId = async (id) => {
     try{
@@ -58,21 +54,16 @@ const DepartmentList = () => {
 
   useEffect(() => {
     getDepartment();
-  }, [query]);
+  }, []);
 
-  const updateSearch = (evt) => {
-    setSearch(evt.target.value);
-  };
+  const { Search } = Input;
 
-  const getSearch = (e) => {
-    e.preventDefault();
-    setQuery(search);
-    // to reset after search button click
-    setSearch('');
-    
-  };
+  const onSearch = (e) => {
+    console.log(e);
+    setSearchItem(e.target.value);
+  }
 
-  // const { Search } = Input;
+  // onChange={(e) => { setSearchItem(e.target.value);}} 
   
   return (
     <>
@@ -85,28 +76,18 @@ const DepartmentList = () => {
           <div className="col-md-6"><h2>Department List</h2></div>
           <div className="col-md-6">
             {/* <Search placeholder="input search text" onSearch={onSearch} enterButton /> */}
-            <form onSubmit={getSearch} className="search-form">
-              <input 
-              class="form-control me-sm-2" 
-              placeholder="Search department"
+            <input 
               style={{
-                height: "40px",
-                display: "initial",
-                padding: "0 5px", 
-                width: "70%", 
-                fontSize:"14px"
+              height: "40px",
+              padding: "0 5px", 
+              width: "100%", 
+              fontSize:"14px"}} 
+              type="text" 
+              placeholder="Search by name.." 
+              onChange={(e) => {
+                  setSearchItem(e.target.value);
               }}
-              type="text"
-              value={search} 
-              onChange={updateSearch} />
-
-              <button class="btn btn-primary my-2 my-sm-0" 
-              style={{
-                height: "40px",
-                padding: "0 5px",
-                width: "20%",
-              }} type="submit">Search</button>
-            </form> 
+            /> 
             </div>
         </div>
         <table className="table">
@@ -119,16 +100,10 @@ const DepartmentList = () => {
           </thead>
           <tbody>
             {department.filter((val) => {
-                if(search === ""){
-                    return val
-                }
-                else if(val.name.toLowerCase().includes(search.toLowerCase())){
-                    return val
-                }
-                else if(val.search){
-                    return val
-                }
-
+              console.log('val', val.name)
+              if(searchItem === ''){
+                return val
+              }
             }).map((m) => (
               <tr key={m._id}>
                 <td scope="row">{m._id}</td>
