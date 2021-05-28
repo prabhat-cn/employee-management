@@ -87,18 +87,19 @@ const DepartmentList = () => {
             {/* <Search placeholder="input search text" onSearch={onSearch} enterButton /> */}
             <form onSubmit={getSearch} className="search-form">
               <input 
-              class="form-control me-sm-2" 
-              placeholder="Search department"
-              style={{
-                height: "40px",
-                display: "initial",
-                padding: "0 5px", 
-                width: "70%", 
-                fontSize:"14px"
-              }}
-              type="text"
-              value={search} 
-              onChange={updateSearch} />
+                class="form-control me-sm-2" 
+                placeholder="Search department"
+                style={{
+                  height: "40px",
+                  display: "initial",
+                  padding: "0 5px", 
+                  width: "70%", 
+                  fontSize:"14px"
+                }}
+                type="text"
+                value={search} 
+                onChange={updateSearch} 
+              />
 
               <button class="btn btn-primary my-2 my-sm-0" 
               style={{
