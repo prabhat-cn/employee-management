@@ -12,14 +12,14 @@ const Routes = (props) => {
         <Router>
             <Navbar />
             <Switch>
-            <Route exact path='/' render={props =>(<Suspense fallback={<p>Loading...</p>} >
-                <DepartmentList {...props} />
-            </Suspense>)} />
+                <Route exact path='/' render={props =>(<Suspense fallback={<p>Loading...</p>} >
+                    <DepartmentList {...props} />
+                </Suspense>)} />
 
-            <Route exact path='/emplyees' render={props =>(<Suspense fallback={<p>Loading...</p>} >
-                <EmployeeList {...props} />
-            </Suspense>)} />
-            <Route exact path='*'><h2>404 Not Found!</h2></Route> 
+                <Route exact path='/emplyees' render={props =>(<Suspense fallback={<p>Loading...</p>} >
+                    <EmployeeList {...props} />
+                </Suspense>)} />
+                <Route exact path='*'><h2>404 Not Found!</h2></Route> 
             </Switch>
         </Router>
     )
