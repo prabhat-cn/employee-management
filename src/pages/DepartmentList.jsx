@@ -3,12 +3,12 @@ import Avatar from 'react-avatar'
 import { Button, Modal, Input } from 'antd';
 import API from '../api';
 
-const { Search } = Input;
 
-const onSearch = value => console.log(value);
 
 
 const DepartmentList = () => {
+
+  const [ searchItem, setSearchItem ] = useState('');
 
   const [department, setDepartment] = useState([]);
   const [singleDepartment, setSingleDepartment] = useState({name: '', _id: ''});
@@ -55,6 +55,15 @@ const DepartmentList = () => {
   useEffect(() => {
     getDepartment();
   }, []);
+
+  const { Search } = Input;
+
+  const onSearch = (e) => {
+    console.log(e);
+    setSearchItem(e.target.value);
+  }
+
+  // onChange={(e) => { setSearchItem(e.target.value);}} 
   
   return (
     <>
@@ -65,10 +74,24 @@ const DepartmentList = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-6"><h2>Department List</h2></div>
-          <div className="col-md-6"><Search placeholder="input search text" onSearch={onSearch} enterButton /></div>
+          <div className="col-md-6">
+            {/* <Search placeholder="input search text" onSearch={onSearch} enterButton /> */}
+            <input 
+                            style={{
+                            height: "40px",
+                            padding: "0 5px", 
+                            width: "100%", 
+                            fontSize:"14px"}} 
+                            type="text" 
+                            placeholder="Search by name.." 
+                            onChange={(e) => {
+                                setSearchItem(e.target.value);
+                            }}
+                        /> 
+            </div>
         </div>
-        <table class="table">
-          <thead class="thead-dark">
+        <table className="table">
+          <thead className="thead-dark">
             <tr>
               <th scope="col">Id</th>
               <th scope="col">Department Name</th>
@@ -76,7 +99,12 @@ const DepartmentList = () => {
             </tr>
           </thead>
           <tbody>
-            {department.map((m) => (
+            {department.filter((val) => {
+              // console.log('val', val.name)
+              if(searchItem === ''){
+                return val.name
+              }
+            }).map((m) => (
               <tr key={m._id}>
                 <td scope="row">{m._id}</td>
                 <td>

@@ -67,8 +67,8 @@ const EmployeeList = () => {
           <div className="col-md-6"><h2>Employee List</h2></div>
           <div className="col-md-6"><Search placeholder="input search text" onSearch={onSearch} enterButton /></div>
         </div>
-        <table class="table">
-          <thead class="thead-dark">
+        <table className="table">
+          <thead className="thead-dark">
             <tr>
               <th scope="col">Id</th>
               <th scope="col">Employee Name</th>
