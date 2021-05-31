@@ -8,6 +8,11 @@ const LoginForm = Loadable({
     loading: Loader,
 });
 
+const ForgetPassword = Loadable({
+    loader: () => import('../pages/forms/ForgetPassword'),
+    loading: Loader,
+});
+
 const RegisterForm = Loadable({
     loader: () => import('../pages/forms/RegisterForm'),
     loading: Loader,
@@ -25,6 +30,7 @@ const EmployeeList = Loadable({
 
 export {
     LoginForm,
+    ForgetPassword,
     RegisterForm,
     DepartmentList,
     EmployeeList
