@@ -75,7 +75,7 @@ const EmployeeList = () => {
         <h2>{singleEmployee.name}</h2>
       </Modal>
 
-      <div className="container">
+      <div className="container list-data">
         <div className="row">
           <div className="col-md-6"><h2>Employee List</h2></div>
           <div className="col-md-6">

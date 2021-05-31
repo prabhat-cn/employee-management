@@ -78,7 +78,7 @@ const DepartmentList = () => {
         <h2>{singleDepartment.name}</h2>
       </Modal>
 
-      <div className="container">
+      <div className="container list-data">
         <div className="row">
           <div className="col-md-6"><h2>Department List</h2></div>
           <div className="col-md-6">
