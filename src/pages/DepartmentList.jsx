@@ -104,7 +104,7 @@ const DepartmentList = () => {
                 height: "40px",
                 padding: "0 5px",
                 width: "20%",
-              }} type="submit">Search</button>
+              }} type="submit">Reset</button>
             </form> 
             </div>
         </div>
