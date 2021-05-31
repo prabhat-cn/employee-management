@@ -1,58 +1,140 @@
 import React, {useState} from 'react'
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import {Link} from 'react-router-dom'
-import { useForm } from "react-hook-form";
 import { Alert } from 'react-bootstrap';
 
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const RegisterForm = () => {
 
     const [submitted, setSubmitted] = useState(false);
   
-    // functions to build form returned by useForm() hook
-    const { register, handleSubmit, watch, reset, control,  formState: { errors, isSubmitting } } = useForm();
-  
-    const onSubmit = async (data) => {
-      // alert(JSON.stringify(data));
-      // JSON.stringify(value, replacer, space)
-      console.log("Submitted", JSON.stringify(data, null, 2));
-      setSubmitted(true);
-      reset();
+    const initialValues = {
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
     };
+
+    const contactSchema = Yup.object().shape({
+
+        name: Yup.string()
+          .required("Name required")
+          .min(3, "Must be 3 letters")
+          .max(12, "Must be 12 letters or less")
+          .matches(/^[A-Za-z]+$/i, "Name should be letter"),
   
-    console.log(watch("example")); // watch input value by passing the name of it
+        email: Yup.string()
+          .required('Email is required')
+          .email('Email is invalid'),
+
+        // password: Yup.string().required("Please provide a valid password"),
+        // passwordMin: Yup.string().oneOf([Yup.ref('password'), null]).min(8, 'Minimum 8 characters'),
+        // passwordLC: Yup.string().oneOf([Yup.ref('password'), null]).matches(/[a-z]/, "One Lowercase" ),
+        // passwordUC: Yup.string().oneOf([Yup.ref('password'), null]).matches(/[A-Z]/, "One Uppercase" ),
+        
+
+        password: Yup.string()
+          .min(8, 'Password must be at least 8 characters')
+          .required('Password is required')
+          .matches(
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})",
+            "One Uppercase, One Lowercase, One Number and one special case Character"),
+        confirmPassword: Yup.string()
+            .oneOf([Yup.ref('password'), null], 'Passwords must match')
+            .required('Confirm Password is required'),
+    });
+
+    const onSubmit = async (values, submitProps) => {
+        console.log("form-values", JSON.stringify(values, null, 2));
+        // console.log('submitProps', submitProps)
+        await sleep(500);
+        setSubmitted(true);
+        submitProps.resetForm()
+        // alert(JSON.stringify(values, null, 2));
+    }
 
     return (
+        <>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={contactSchema}
+          onSubmit={onSubmit}
+        >
+          {(formik) => {
+            
+            //  console.log('formik', formik.values)
+            const { errors, touched, isValid, dirty } = formik;
+            
+            return (
+              <>
         <div className="auth-wrapper">
             <div className="auth-inner">
-                <form>
+                <Form id="register">
+                {submitted && 
+                <Alert variant="success">
+                <div className='success-message' style={{textAlign: "center"}}>Success! Thank you for your response</div>
+                </Alert>
+
+                }
                     <h3>Sign Up</h3>
 
                     <div className="form-group">
-                        <label>First name</label>
-                        <input type="text" className="form-control" placeholder="First name" />
-                    </div>
+                        <label>Name</label>
+                        <Field type="text" name="name" id="name" 
+                        placeholder="Type name" autoComplete="on" 
+                        className={"form-control"+ " " + (errors.name && touched.name ? 
+                        'input-error' : null)} />
 
-                    <div className="form-group">
-                        <label>Last name</label>
-                        <input type="text" className="form-control" placeholder="Last name" />
+                        <ErrorMessage name="name" style={{color: 'red', marginBottom: "4px"}} component="span" className="error" />
+
                     </div>
 
                     <div className="form-group">
                         <label>Email address</label>
-                        <input type="email" className="form-control" placeholder="Enter email" />
+                        <Field type="text" name="email" id="email" 
+                        placeholder="Enter email" autoComplete="on" className={'form-control'+ " " + (errors.email && touched.email ? "input-error" : null)} />
+                        <ErrorMessage name="email" style={{color: 'red', marginBottom: "4px"}} component="span" className="error" />
                     </div>
 
                     <div className="form-group">
                         <label>Password</label>
-                        <input type="password" className="form-control" placeholder="Enter password" />
+                        <Field type="password" name="password" id="password" placeholder="Enter password" autoComplete="on" 
+                        className={'form-control'+ " " + (errors.password && touched.password ? "input-error" : null)} />
+                        <ErrorMessage name="password" style={{color: 'red', marginBottom: "4px"}} component="span" className="error" />
                     </div>
 
-                    <button type="submit" className="btn btn-primary btn-block">Sign Up</button>
+                    <div className="form-group">
+                        <label>Confirm password</label>
+                        <Field type="password" name="confirmPassword" id="confirmPassword" placeholder="Re-enter password" autoComplete="on" 
+                        className={'form-control'+ " " + (errors.confirmPassword && touched.confirmPassword ? "input-error" : null)} />
+                        <ErrorMessage name="confirmPassword" style={{color: 'red', marginBottom: "4px"}} component="span" className="error" />
+                    </div>
+
+                    {/* <button type="submit" className="btn btn-primary btn-block">Sign Up</button> */}
+
+                    <button
+                    type="submit"
+                    className={"btn btn-primary btn-block"+' '+(!(dirty && isValid) ? "disabled" : "")}
+                    disabled={!(dirty && isValid)}>
+                    Sign Up
+                    </button>
+                  
                     <p className="forgot-password text-right">
                         Already registered <Link to="/login">sign in?</Link>
                     </p>
-                </form>
+                </Form>
             </div>
         </div>
+        </>
+          );
+        }}
+        
+    </Formik>
+        
+        
+        </>
 
     )
 }
