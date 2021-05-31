@@ -17,14 +17,19 @@ const Navbar = () => {
 
     return (
         <>
-          <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
+        <div className="container">
+            <div className="row">
+            <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
             <Menu.Item key="mail" icon={<MailOutlined />}>
-              <Link to='/'>Depertment</Link>
+              <Link to='/department'>Depertment</Link>
             </Menu.Item>
             <Menu.Item key="mail" icon={<MailOutlined />}>
-              <Link to='/emplyees'>Employee</Link> 
+              <Link to='/employees'>Employee</Link> 
             </Menu.Item>
           </Menu>
+            </div>
+        </div>
+        
         </>
     )
 }
