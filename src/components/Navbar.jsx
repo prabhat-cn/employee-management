@@ -24,7 +24,7 @@ const Navbar = () => {
               <Link to='/department'>Depertment</Link>
             </Menu.Item>
             <Menu.Item key="mail" icon={<MailOutlined />}>
-              <Link to='/employees'>Employee</Link> 
+              <Link to='/employee'>Employee</Link> 
             </Menu.Item>
           </Menu>
             </div>

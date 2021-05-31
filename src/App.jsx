@@ -3,16 +3,14 @@ import { Switch, Route } from "react-router-dom";
 import { Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import './App.css';
-import Routes from "./routes";
+import Routes from "./router";
 
 const history = createBrowserHistory();
 
 function App() {
   return (
     <div className="App">
-      <Router history={history}>
-        <Routes />
-      </Router>
+      <Routes />
     </div>
   );
 }

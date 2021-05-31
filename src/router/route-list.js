@@ -1,0 +1,32 @@
+
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from "react-loader-spinner";
+import Loadable from 'react-loadable';
+
+const LoginForm = Loadable({
+    loader: () => import('../pages/forms/LoginForm'),
+    loading: Loader,
+});
+
+const RegisterForm = Loadable({
+    loader: () => import('../pages/forms/RegisterForm'),
+    loading: Loader,
+});
+
+const DepartmentList = Loadable({
+    loader: () => import('../pages/DepartmentList'),
+    loading: Loader,
+});
+
+const EmployeeList = Loadable({
+    loader: () => import('../pages/EmployeeList'),
+    loading: Loader,
+});
+
+export {
+    LoginForm,
+    RegisterForm,
+    DepartmentList,
+    EmployeeList
+};
+  
