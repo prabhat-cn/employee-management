@@ -89,12 +89,7 @@ const LoginForm = () => {
                         <img className="toggle-image"
                         title={isRevealPwd ? "Hide password" : "Show password"} src={isRevealPwd ? hidePwdImg : showPwdImg}
                         onClick={() => setIsRevealPwd(prevState => !prevState)} />
-                        </div>
-
-
-
-
-                        
+                        </div> 
                     </div>
 
                     {/* <div className="form-group">
