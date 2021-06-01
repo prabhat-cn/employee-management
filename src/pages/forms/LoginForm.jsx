@@ -4,6 +4,8 @@ import {Link} from 'react-router-dom'
 import { useForm } from "react-hook-form";
 import { Alert } from 'react-bootstrap';
 
+import API from '../../api';
+
 const LoginForm = () => {
 
     const inputRef = useRef();
@@ -11,16 +13,38 @@ const LoginForm = () => {
     const hideIcon = () => <i class="fa fa-eye-slash" aria-hidden="true"></i>
 
     const [submitted, setSubmitted] = useState(false);
+    const [error, setError] = useState('');
 
     // functions to build form returned by useForm() hook
     const { register, handleSubmit, watch, reset, control,  formState: { errors, isSubmitting } } = useForm();
   
+    const loginSubmit = (loginData) => {
+        API.post('/loginasadmin', loginData)
+            .then((response) => {
+                console.log(response);
+                setError('');
+                setSubmitted(true);
+                reset();
+
+                const userData = response.data.data;
+
+                localStorage.setItem('userToken', JSON.stringify(userData));
+            })
+            .catch((err) => {
+                console.log(err.response);
+                const {status, data} = err.response
+                setSubmitted(false);
+                if(status === 400){
+                    setError(data.message.text)
+                }
+                if(status === 401){
+                    setError(data.message.text)
+                }
+            });
+    }
+
     const onSubmit = async (data) => {
-      // alert(JSON.stringify(data));
-      // JSON.stringify(value, replacer, space)
-      console.log("Submitted", JSON.stringify(data, null, 2));
-      setSubmitted(true);
-      reset();
+      loginSubmit(data)
     };
   
     console.log(watch("example")); // watch input value by passing the name of it
@@ -32,6 +56,11 @@ const LoginForm = () => {
                 {submitted && 
                     <Alert variant="success">
                     <div className='success-message' style={{textAlign: "center"}}>Success! Thank you for your response</div>
+                    </Alert>
+                }
+                {error !== '' && 
+                    <Alert variant="danger">
+                    <div className='danger-message' style={{textAlign: "center"}}>{error}</div>
                     </Alert>
                 }
                     <h3>Sign In</h3>
