@@ -12,6 +12,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const RegisterForm = () => {
 
     const [isRevealPwd, setIsRevealPwd] = useState(false);
+    const [isRevealCPwd, setIsRevealCPwd] = useState(false);
 
     const [submitted, setSubmitted] = useState(false);
   
@@ -118,12 +119,12 @@ const RegisterForm = () => {
                     <div className="form-group">
                         <label>Confirm password</label>
                         <div className="pwd-container">
-                        <Field type={isRevealPwd ? "text" : "password"} name="confirmPassword" id="confirmPassword" placeholder="Re-enter password" autoComplete="on" 
+                        <Field type={isRevealCPwd ? "text" : "password"} name="confirmPassword" id="confirmPassword" placeholder="Re-enter password" autoComplete="on" 
                         className={'form-control'+ " " + (errors.confirmPassword && touched.confirmPassword ? "input-error" : null)} />
                         <ErrorMessage name="confirmPassword" style={{color: 'red', marginBottom: "4px"}} component="span" className="error" />
                         <img className="toggle-image"
-                        title={isRevealPwd ? "Hide password" : "Show password"} src={isRevealPwd ? hidePwdImg : showPwdImg}
-                        onClick={() => setIsRevealPwd(prevState => !prevState)} />
+                        title={isRevealCPwd ? "Hide password" : "Show password"} src={isRevealCPwd ? hidePwdImg : showPwdImg}
+                        onClick={() => setIsRevealCPwd(prevState => !prevState)} />
                         </div>
                     </div>
 
