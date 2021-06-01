@@ -1,22 +1,21 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, {useState, useRef} from 'react'
-import ReactPasswordToggleIcon from 'react-password-toggle-icon';
 import {Link} from 'react-router-dom'
 import { useForm } from "react-hook-form";
 import { Alert } from 'react-bootstrap';
+import showPwdImg from '../../assets/eye-slash-solid.svg';
+import hidePwdImg from '../../assets/eye-solid.svg';
 
 import API from '../../api';
 
 const LoginForm = () => {
-
-    const inputRef = useRef();
-    const showIcon = () => <i class="fa fa-eye" aria-hidden="true"></i>;
-    const hideIcon = () => <i class="fa fa-eye-slash" aria-hidden="true"></i>
+    const [isRevealPwd, setIsRevealPwd] = useState(false);
 
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState('');
 
     // functions to build form returned by useForm() hook
-    const { register, handleSubmit, watch, reset, control,  formState: { errors, isSubmitting } } = useForm();
+    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
   
     const loginSubmit = (loginData) => {
         API.post('/loginasadmin', loginData)
@@ -25,6 +24,9 @@ const LoginForm = () => {
                 setError('');
                 setSubmitted(true);
                 reset();
+
+                // const userData = response.data.token;
+                // localStorage.setItem('userToken', userData);
 
                 const userData = response.data.data;
 
@@ -47,7 +49,7 @@ const LoginForm = () => {
       loginSubmit(data)
     };
   
-    console.log(watch("example")); // watch input value by passing the name of it
+    // console.log(watch("email")); // watch input value by passing the name of it
 
     return (
         <div className="auth-wrapper">
@@ -74,18 +76,17 @@ const LoginForm = () => {
                     </div>
                     <div className="form-group">
                         <label>Password</label>   
-                        <span style={{position:"relative",display:"block"}}>
-                        <input ref={inputRef} type="password" className="form-control" name="password" id="password" placeholder="Enter password" autoComplete="on"
+                        <div className="pwd-container">
+                        <input type={isRevealPwd ? "text" : "password"} className="form-control" name="password" id="password" placeholder="Enter password" autoComplete="on"
                         {...register("password", { required: true,  minLength: 8, pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/})} />
                         {errors.password?.type === "required" && <span style={{color: 'red'}}>Password is required</span>}
                         {errors.password?.type === "minLength" && <span style={{color: 'red'}}>Password minimum 8 characters long</span>}
                         {errors.password?.type === "pattern" && <span style={{color: 'red'}}>Password is not strong</span>}
-                        <ReactPasswordToggleIcon 
-                        inputRef={inputRef} 
-                        showIcon={showIcon}
-                        hideIcon={hideIcon}
-                        />
-                        </span><br/>
+
+                        <img className="toggle-image"
+                        title={isRevealPwd ? "Hide password" : "Show password"} src={isRevealPwd ? hidePwdImg : showPwdImg}
+                        onClick={() => setIsRevealPwd(prevState => !prevState)} />
+                        </div>
 
 
 
@@ -123,14 +124,15 @@ export default LoginForm;
 
 const eyeToggle = `
 
-.eye-toggle{
-    
-    display: block;
-    width: 100%;
-    border: 0px;
-    border-bottom: 1px solid orange;
-    padding: 5px;
-    font-size: 20px;
-    outline: none;
-}
+.pwd-container {
+    position: relative;
+  }
+   
+  .pwd-container img {
+    cursor: pointer;
+    position: absolute;
+    width: 20px;
+    right: 8px;
+    top: 8px;
+  }
 `;

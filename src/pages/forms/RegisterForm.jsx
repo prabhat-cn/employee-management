@@ -1,12 +1,17 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, {useState} from 'react'
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import {Link} from 'react-router-dom'
 import { Alert } from 'react-bootstrap';
+import showPwdImg from '../../assets/eye-slash-solid.svg';
+import hidePwdImg from '../../assets/eye-solid.svg';
 
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const RegisterForm = () => {
+
+    const [isRevealPwd, setIsRevealPwd] = useState(false);
 
     const [submitted, setSubmitted] = useState(false);
   
@@ -100,16 +105,26 @@ const RegisterForm = () => {
 
                     <div className="form-group">
                         <label>Password</label>
-                        <Field type="password" name="password" id="password" placeholder="Enter password" autoComplete="on" 
+                        <div className="pwd-container">
+                        <Field type={isRevealPwd ? "text" : "password"} name="password" id="password" placeholder="Enter password" autoComplete="on" 
                         className={'form-control'+ " " + (errors.password && touched.password ? "input-error" : null)} />
                         <ErrorMessage name="password" style={{color: 'red', marginBottom: "4px"}} component="span" className="error" />
+                        <img className="toggle-image"
+                        title={isRevealPwd ? "Hide password" : "Show password"} src={isRevealPwd ? hidePwdImg : showPwdImg}
+                        onClick={() => setIsRevealPwd(prevState => !prevState)} />
+                        </div>
                     </div>
 
                     <div className="form-group">
                         <label>Confirm password</label>
-                        <Field type="password" name="confirmPassword" id="confirmPassword" placeholder="Re-enter password" autoComplete="on" 
+                        <div className="pwd-container">
+                        <Field type={isRevealPwd ? "text" : "password"} name="confirmPassword" id="confirmPassword" placeholder="Re-enter password" autoComplete="on" 
                         className={'form-control'+ " " + (errors.confirmPassword && touched.confirmPassword ? "input-error" : null)} />
                         <ErrorMessage name="confirmPassword" style={{color: 'red', marginBottom: "4px"}} component="span" className="error" />
+                        <img className="toggle-image"
+                        title={isRevealPwd ? "Hide password" : "Show password"} src={isRevealPwd ? hidePwdImg : showPwdImg}
+                        onClick={() => setIsRevealPwd(prevState => !prevState)} />
+                        </div>
                     </div>
 
                     <button type="submit" className="btn btn-primary btn-block">Sign Up</button>
@@ -126,6 +141,7 @@ const RegisterForm = () => {
                     </p>
                 </Form>
             </div>
+            <style>{eyeToggle}</style>
         </div>
         </>
           );
@@ -139,4 +155,19 @@ const RegisterForm = () => {
     )
 }
 
-export default RegisterForm
+export default RegisterForm;
+
+const eyeToggle = `
+
+.pwd-container {
+    position: relative;
+  }
+   
+  .pwd-container img {
+    cursor: pointer;
+    position: absolute;
+    width: 20px;
+    right: 8px;
+    top: 8px;
+  }
+`;
