@@ -1,9 +1,14 @@
-import React, {useState} from 'react'
+import React, {useState, useRef} from 'react'
+import ReactPasswordToggleIcon from 'react-password-toggle-icon';
 import {Link} from 'react-router-dom'
 import { useForm } from "react-hook-form";
 import { Alert } from 'react-bootstrap';
 
 const LoginForm = () => {
+
+    const inputRef = useRef();
+    const showIcon = () => <i class="fa fa-eye" aria-hidden="true"></i>;
+    const hideIcon = () => <i class="fa fa-eye-slash" aria-hidden="true"></i>
 
     const [submitted, setSubmitted] = useState(false);
 
@@ -39,12 +44,24 @@ const LoginForm = () => {
                         {errors.email?.type === "pattern" && <span style={{color: 'red'}}>Type valid email</span>}
                     </div>
                     <div className="form-group">
-                        <label>Password</label>
-                        <input type="password" className="form-control" name="password" id="password" placeholder="Enter password" autoComplete="on"
+                        <label>Password</label>   
+                        <span style={{position:"relative",display:"block"}}>
+                        <input ref={inputRef} type="password" className="form-control" name="password" id="password" placeholder="Enter password" autoComplete="on"
                         {...register("password", { required: true,  minLength: 8, pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/})} />
                         {errors.password?.type === "required" && <span style={{color: 'red'}}>Password is required</span>}
                         {errors.password?.type === "minLength" && <span style={{color: 'red'}}>Password minimum 8 characters long</span>}
                         {errors.password?.type === "pattern" && <span style={{color: 'red'}}>Password is not strong</span>}
+                        <ReactPasswordToggleIcon 
+                        inputRef={inputRef} 
+                        showIcon={showIcon}
+                        hideIcon={hideIcon}
+                        />
+                        </span><br/>
+
+
+
+
+                        
                     </div>
 
                     {/* <div className="form-group">
@@ -66,8 +83,25 @@ const LoginForm = () => {
                     </p>
                 </form>
             </div>
+            <style>{eyeToggle}</style>
         </div>
     )
 }
 
-export default LoginForm
+export default LoginForm;
+
+
+
+const eyeToggle = `
+
+.eye-toggle{
+    
+    display: block;
+    width: 100%;
+    border: 0px;
+    border-bottom: 1px solid orange;
+    padding: 5px;
+    font-size: 20px;
+    outline: none;
+}
+`;

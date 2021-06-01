@@ -29,7 +29,7 @@ const PublicRoute = ({ component: Component, auth, ...rest }) => (
 
 
 const Routes = () => {
-    const authState = true;
+    const authState = false;
 
     return (
         <Router>

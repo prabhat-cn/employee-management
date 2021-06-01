@@ -112,14 +112,14 @@ const RegisterForm = () => {
                         <ErrorMessage name="confirmPassword" style={{color: 'red', marginBottom: "4px"}} component="span" className="error" />
                     </div>
 
-                    {/* <button type="submit" className="btn btn-primary btn-block">Sign Up</button> */}
+                    <button type="submit" className="btn btn-primary btn-block">Sign Up</button>
 
-                    <button
+                    {/* <button
                     type="submit"
                     className={"btn btn-primary btn-block"+' '+(!(dirty && isValid) ? "disabled" : "")}
                     disabled={!(dirty && isValid)}>
                     Sign Up
-                    </button>
+                    </button> */}
                   
                     <p className="forgot-password text-right">
                         Already registered <Link to="/login">sign in?</Link>
