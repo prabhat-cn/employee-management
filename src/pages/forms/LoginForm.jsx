@@ -77,11 +77,14 @@ const LoginForm = () => {
                     <div className="form-group">
                         <label>Password</label>   
                         <div className="pwd-container">
-                        <input type={isRevealPwd ? "text" : "password"} className="form-control" name="password" id="password" placeholder="Enter password" autoComplete="on"
-                        {...register("password", { required: true,  minLength: 8, pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/})} />
+                        <input type={isRevealPwd ? "text" : "password"} className="form-control" name="password" id="password" 
+                        placeholder="Enter password" autoComplete="on"
+                        {...register("password", { required: true,  minLength: 8, 
+                        // pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/
+                        })} />
                         {errors.password?.type === "required" && <span style={{color: 'red'}}>Password is required</span>}
                         {errors.password?.type === "minLength" && <span style={{color: 'red'}}>Password minimum 8 characters long</span>}
-                        {errors.password?.type === "pattern" && <span style={{color: 'red'}}>Password is not strong</span>}
+                        {/* {errors.password?.type === "pattern" && <span style={{color: 'red'}}>Password is not strong</span>} */}
 
                         <img className="toggle-image"
                         title={isRevealPwd ? "Hide password" : "Show password"} src={isRevealPwd ? hidePwdImg : showPwdImg}

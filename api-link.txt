@@ -1,1 +1,8 @@
 https://documenter.getpostman.com/view/4293302/TzRa7j5d
+
+
+login er cred
+{
+"email": "iamadmin.officeemployee@herokuapp.com",
+"password": "12345678"
+}
