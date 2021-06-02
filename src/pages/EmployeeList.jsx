@@ -159,32 +159,31 @@ const EmployeeList = () => {
           
           }
             <div className="form-group">
-                <input type="hidden" className="form-control" name="id" id="id" value={editvalue._id} />
+              <input type="hidden" className="form-control" name="id" id="id" value={editvalue._id} />
 
-                <label>Name</label>
-                <input type="text" className="form-control" name="name" id="name" placeholder="Name" value={editvalue.name}
-                onChange={e=>setEditvalues({...editvalue,name:e.target.value})}
-                // {...register("name", { required: true, minLength: 3, maxLength: 20, pattern: /^[A-Za-z]+$/i })} 
-                />
+              <label>Name</label>
+              <input type="text" className="form-control" name="name" id="name" placeholder="Name" value={editvalue.name}
+              onChange={e=>setEditvalues({...editvalue,name:e.target.value})}
+              {...register("name", { required: true, minLength: 3, maxLength: 20})} 
+              />
 
-                  {/* { errors.name?.type === "required" && <span style={{color: 'red'}}>First name required</span> }
-                  { errors.name?.type === "pattern" && <span style={{color: 'red'}}>Only letter accepted</span> }
-                  { errors.name?.type === "minLength" && <span style={{color: 'red'}}>Minimum length is 3 letters</span> }
-                  { errors.name?.type === "maxLength" && <span style={{color: 'red'}}>Maximum length is 20 letters</span> } */}
+              { errors.name?.type === "required" && <span style={{color: 'red'}}>First name required</span> }
+              { errors.name?.type === "minLength" && <span style={{color: 'red'}}>Minimum length is 3 letters</span> }
+              { errors.name?.type === "maxLength" && <span style={{color: 'red'}}>Maximum length is 20 letters</span> }
             </div>
             <div className="form-group">
-                <label>Department</label>
-                <select className="form-control" name="process" {...register("process", { required: true})} 
-                onChange={e=>setEditvalues({...editvalue,department:e.target.value})}>
-                  <option value="">Select option</option>
-                  {
-                    department && department.map((dept,i)=>(
-                      <option value={dept._id} key={i} selected={ editvalue.department === dept._id} >{dept.name}</option>
-                    ))
-                  }
+              <label>Department</label>
+              <select className="form-control" name="process" {...register("process", { required: true})} 
+              onChange={e=>setEditvalues({...editvalue,department:e.target.value})}>
+                <option value="">Select option</option>
+                {
+                  department && department.map((dept,i)=>(
+                    <option value={dept._id} key={i} selected={ editvalue.department === dept._id} >{dept.name}</option>
+                  ))
+                }
 
-                </select>
-                {errors.process && <span style={{color: 'red'}}>Select any one</span>}
+              </select>
+              {errors.process && <span style={{color: 'red'}}>Select any one</span>}
             </div>
             <div className="form-group">
               <button type="submit" id="form-submit" className="btn btn-primary btn-block">Save</button>
@@ -197,7 +196,7 @@ const EmployeeList = () => {
       <div className="container list-data">
         <div className="row">
           <div className="col-md-4">
-            <h2>Employee List</h2>
+            <h3>Employee List</h3>
           </div>
           <div className="col-md-5">
           <form onSubmit={getSearch} className="search-form">

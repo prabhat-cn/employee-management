@@ -82,7 +82,7 @@ const DepartmentList = () => {
 
       <div className="container list-data">
         <div className="row">
-          <div className="col-md-6"><h2>Department List</h2></div>
+          <div className="col-md-6"><h3>Department List</h3></div>
           <div className="col-md-6">
             {/* <Search placeholder="input search text" onSearch={onSearch} enterButton /> */}
             <form onSubmit={getSearch} className="search-form">
@@ -132,8 +132,8 @@ const DepartmentList = () => {
 
             }).map((m) => (
               <tr key={m._id}>
-                <td scope="row">{m._id}</td>
-                <td>
+                <td style={{'textAlign': 'left'}}>{m._id}</td>
+                <td style={{'textAlign': 'left'}}>
                 <Avatar className="mr-2" name={m.name} size="45" round={true} /> {m.name}</td>
                 <td>
                   <Button type="btn btn-success rounded-circle"  onClick={() => viewDetail(m._id)}>
