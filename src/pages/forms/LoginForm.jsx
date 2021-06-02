@@ -31,6 +31,7 @@ const LoginForm = () => {
                 const userData = response.data.data;
 
                 localStorage.setItem('userToken', JSON.stringify(userData));
+                window.location.reload();
             })
             .catch((err) => {
                 console.log(err.response);

@@ -29,7 +29,8 @@ const PublicRoute = ({ component: Component, auth, ...rest }) => (
 
 
 const Routes = () => {
-    const authState = true;
+    const userData = localStorage.getItem('userToken');
+    const authState = userData ? true : false;
 
     return (
         <Router>

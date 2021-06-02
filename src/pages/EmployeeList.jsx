@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { useForm } from "react-hook-form";
-import { Button, Modal } from 'antd';
+import { Button, Modal, notification } from 'antd';
 import Avatar from 'react-avatar'
 import API from '../api';
 import { Alert } from 'react-bootstrap';
@@ -13,11 +13,20 @@ const EmployeeList = () => {
   const [singleEmployee, setSingleEmployee] = useState({name: '', _id: ''});
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
- 
 
-    // Search
-    const[search, setSearch] = useState("");
-    const[query, setQuery] = useState('name')
+  // Search
+  const[search, setSearch] = useState("");
+  const[query, setQuery] = useState('name');
+
+  // for edit form  
+  const [isSecondModalVisible, setIsSecondModalVisible] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [department, setDepartment] = useState([]);
+  const [editvalue,setEditvalues] = useState({});
+
+  // functions to build form returned by useForm() hook
+  const { register, handleSubmit, watch, reset,  formState: { errors } } = useForm();
+
 
   const getEmployee = async () => {
     setLoading(true);
@@ -45,8 +54,6 @@ const EmployeeList = () => {
     getEmployeeId(id);
   }
 
- 
-
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -58,10 +65,6 @@ const EmployeeList = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-
-  useEffect(() => {
-    getEmployee();
-  }, [query]);
 
   const updateSearch = (evt) => {
     setSearch(evt.target.value);
@@ -75,19 +78,6 @@ const EmployeeList = () => {
     
   };
 
-
-  // for edit form  
-  const [isSecondModalVisible, setIsSecondModalVisible] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [department, setDepartment] = useState([]);
-  const [editvalue,setEditvalues] = useState({});
-
-  // 2nd modal
-  
-  const showEditModal = () => {
-    setIsSecondModalVisible(true);
-  };
-
   const handleEditOk = () => {
     setIsSecondModalVisible(false);
   };
@@ -95,55 +85,62 @@ const EmployeeList = () => {
   const handleEditCancel = () => {
     setIsSecondModalVisible(false);
   };
-  // functions to build form returned by useForm() hook
-  const { register, handleSubmit, watch, reset,  formState: { errors } } = useForm();
 
-  const editSubmit = async (e) => {
-    // JSON.stringify(value, replacer, space)
-    e.preventDefault();
-    const t = JSON.parse(localStorage.getItem('userToken'))
-    console.log(t.token)
-    console.log(editvalue)
-    const config = {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization':`Token ${t.token}`
-        }
-    }
-    console.log(config)
-   const { datas } = await API.put(`/employee/${editvalue._id}`, editvalue, config)
-    setSubmitted(true);
-    reset();
+  const editSubmit = (e) => {
+    saveEdit({name: editvalue.name, department: editvalue.department, id: editvalue._id});
   };
+
+  const saveEdit = (editData) => {
+    API.put(
+      `/employee/${editData.id}`, 
+      {name: editData.name, department: editData.department}
+    ).then((data) => {
+      notification.success({
+        message: 'Success',
+        description:
+          'Employee is updated successfully',
+      });
+      setIsSecondModalVisible(false);
+      getEmployee();
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
+  const makeDelete = (delID) => {
+    if(window.confirm('Are you want to delete?')){
+      API.delete(`/employee/${delID}`).then((data) => {
+        notification.success({
+          message: 'Success',
+          description:
+            'Employee deleted successfully',
+        });
+        getEmployee();
+      }).catch((err) => {
+        console.log(err);
+      })
+    }
+  }
+
   const getDepartments = async (id) => {
     try{
       const deptDatas = await API.get(`/department`);
-      // console.log(deptDatas)
       setDepartment(deptDatas.data.data);
-      showEditModal();
     }catch(error){
       console.log(error.message);
     }
   };
-  useEffect(() => {
-    getDepartments();
-  }, [])
 
   const editEmployee = (m) => {
-    
-    getEmployeeId(m._id)
-    setEditvalues({
-      ...editvalue,
-      ...m
-    })
-    console.log(editvalue)
+    setEditvalues(m);
+    setIsSecondModalVisible(true);
   }
-  // // delete
-  // const updateEmployee = (id, updatedUser) => {
-  //   // setEditing(false)
-  
-  //   setEditing(users.map((user) => (user.id === id ? updatedUser : user)))
-  // }
+
+  useEffect(() => {
+    getDepartments();
+    getEmployee();
+  }, [])
+
 
   return (
     <>
@@ -257,7 +254,7 @@ const EmployeeList = () => {
                   <Button type="primary rounded-circle"  onClick={() => editEmployee(m)}>
                     <EditIcon />
                   </Button>&nbsp;
-                  <Button type="btn btn-danger rounded-circle" >
+                  <Button type="btn btn-danger rounded-circle" onClick={() => makeDelete(m._id)} >
                     <DeleteIcon />
                   </Button>
                 </td>

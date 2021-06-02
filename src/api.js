@@ -13,7 +13,7 @@ API.interceptors.request.use((config) => {
 
   const userData = localStorage.getItem('userToken');
 
-  config.headers.Authorization =  userData ? `Token ${userData.token}` : '';
+  config.headers.Authorization =  userData ? `Token ${JSON.parse(userData).token}` : '';
 
   return config;
 });
