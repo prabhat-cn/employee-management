@@ -113,6 +113,7 @@ const DepartmentList = () => {
         <table className="table">
           <thead className="thead-dark">
             <tr>
+              <th scope="col">#Sl.No</th>
               <th scope="col">Id</th>
               <th scope="col">Department Name</th>
               <th scope="col">Action</th>
@@ -130,8 +131,9 @@ const DepartmentList = () => {
                     return val
                 }
 
-            }).map((m) => (
+            }).map((m, index) => (
               <tr key={m._id}>
+                <td style={{'textAlign': 'center'}}>{index +1}</td>
                 <td style={{'textAlign': 'left'}}>{m._id}</td>
                 <td style={{'textAlign': 'left'}}>
                 <Avatar className="mr-2" name={m.name} size="45" round={true} /> {m.name}</td>

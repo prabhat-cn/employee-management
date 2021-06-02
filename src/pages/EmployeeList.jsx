@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Button, Modal, notification, Alert, Space } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import Avatar from 'react-avatar'
+import {find} from 'lodash'
 import API from '../api';
 // import { Alert } from 'react-bootstrap';
 import {ViewIcon, EditIcon, DeleteIcon} from '../constant/icons'
@@ -332,8 +333,14 @@ const EmployeeList = () => {
 
             }).map((m) => (
               <tr key={m._id}>
-                <td style={{'textAlign': 'left'}}>{m._id}</td>
-                <td style={{'textAlign': 'left'}}>
+                {department.map(edata => (
+                  (m._id === edata._id)(
+                    <>
+                  <td style={{'textAlign': 'left'}}>
+                    {/* {find(employee, { id: m._id})} */}
+                    {edata.name}
+                  </td>
+                  <td style={{'textAlign': 'left'}}>
                   <Avatar className="mr-2" name={m.name} size="45" round={true} /> {m.name}</td>
                 <td>
                   <Button type="btn btn-success rounded-circle"  onClick={() => viewDetail(m._id)}>
@@ -346,6 +353,12 @@ const EmployeeList = () => {
                     <DeleteIcon />
                   </Button>
                 </td>
+                </>
+                  )
+                  
+                ))}
+                
+               
               </tr>
             ))}
             
