@@ -38,9 +38,7 @@ const EmployeeList = () => {
   const getEmployee = async () => {
     setLoading(true);
     try{
-      // department respect employee
-      const deptData = await API.get('/employee?populate=department');
-      console.log(deptData.data.data)
+      const deptData = await API.get('/employee');
       setEmployee(deptData.data.data);
       setLoading(false);
     }catch(error){
@@ -316,8 +314,7 @@ const EmployeeList = () => {
         <table className="table">
           <thead className="thead-dark">
             <tr>
-              <th scope="col">#Sl.No</th>
-              <th scope="col">Department</th>
+              <th scope="col">Id</th>
               <th scope="col">Employee Name</th>
               <th scope="col">Action</th>
             </tr>
@@ -334,11 +331,16 @@ const EmployeeList = () => {
                     return val
                 }
 
-            }).map((m, index) => (
+            }).map((m) => (
               <tr key={m._id}>
-                <td style={{'textAlign': 'center'}}>{index + 1}</td>
-                <td style={{'textAlign': 'left'}}>{m.department.name}</td>
-                <td style={{'textAlign': 'left'}}>
+                {department.map(edata => (
+                  (m._id === edata._id)(
+                    <>
+                  <td style={{'textAlign': 'left'}}>
+                    {/* {find(employee, { id: m._id})} */}
+                    {edata.name}
+                  </td>
+                  <td style={{'textAlign': 'left'}}>
                   <Avatar className="mr-2" name={m.name} size="45" round={true} /> {m.name}</td>
                 <td>
                   <Button type="btn btn-success rounded-circle"  onClick={() => viewDetail(m._id)}>
@@ -351,6 +353,12 @@ const EmployeeList = () => {
                     <DeleteIcon />
                   </Button>
                 </td>
+                </>
+                  )
+                  
+                ))}
+                
+               
               </tr>
             ))}
             
