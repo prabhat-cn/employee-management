@@ -77,13 +77,28 @@ const EmployeeList = () => {
 
 
   // for edit form  
+  const [isSecondModalVisible, setIsSecondModalVisible] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [department, setDepartment] = useState([]);
   const [editvalue,setEditvalues] = useState({});
-  // functions to build form returned by useForm() hook
-  const { register, watch, reset,  formState: { errors } } = useForm();
 
-  const handleSubmit = async (e) => {
+  // 2nd modal
+  
+  const showEditModal = () => {
+    setIsSecondModalVisible(true);
+  };
+
+  const handleEditOk = () => {
+    setIsSecondModalVisible(false);
+  };
+
+  const handleEditCancel = () => {
+    setIsSecondModalVisible(false);
+  };
+  // functions to build form returned by useForm() hook
+  const { register, handleSubmit, watch, reset,  formState: { errors } } = useForm();
+
+  const editSubmit = async (e) => {
     // JSON.stringify(value, replacer, space)
     e.preventDefault();
     const t = JSON.parse(localStorage.getItem('userToken'))
@@ -104,7 +119,8 @@ const EmployeeList = () => {
     try{
       const deptDatas = await API.get(`/department`);
       // console.log(deptDatas)
-      setDepartment(deptDatas.data.data)
+      setDepartment(deptDatas.data.data);
+      showEditModal();
     }catch(error){
       console.log(error.message);
     }
@@ -131,12 +147,12 @@ const EmployeeList = () => {
 
   return (
     <>
-      {/* <Modal title="View Employee" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title="View Employee" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <h2>{singleEmployee.name}</h2>
-      </Modal> */}
+      </Modal>
 
-      <Modal title="Edit Employee" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <form id="contact" onSubmit={handleSubmit}>
+      <Modal title="Edit Employee" visible={isSecondModalVisible} onOk={handleEditOk} onCancel={handleEditCancel}>
+        <form id="contact" onSubmit={handleSubmit(editSubmit)}>
           <div className="row">
           {submitted && 
           <Alert variant="success">
@@ -241,7 +257,7 @@ const EmployeeList = () => {
                   <Button type="primary rounded-circle"  onClick={() => editEmployee(m)}>
                     <EditIcon />
                   </Button>&nbsp;
-                  <Button type="btn btn-danger rounded-circle"  onClick={() => viewDetail(m._id)}>
+                  <Button type="btn btn-danger rounded-circle" >
                     <DeleteIcon />
                   </Button>
                 </td>
