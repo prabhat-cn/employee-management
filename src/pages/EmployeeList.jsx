@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { useForm } from "react-hook-form";
 import { Button, Modal, notification } from 'antd';
+import { PlusCircleOutlined } from '@ant-design/icons';
 import Avatar from 'react-avatar'
 import API from '../api';
 import { Alert } from 'react-bootstrap';
@@ -195,7 +196,12 @@ const EmployeeList = () => {
 
       <div className="container list-data">
         <div className="row">
-          <div className="col-md-6"><h2>Employee List</h2></div>
+          <div className="col-md-6">
+            <h2>Employee List</h2>
+            <Button type="primary" icon={<PlusCircleOutlined />}>
+              Add Employee
+            </Button>
+          </div>
           <div className="col-md-6">
           <form onSubmit={getSearch} className="search-form">
               <input 
@@ -244,9 +250,9 @@ const EmployeeList = () => {
 
             }).map((m) => (
               <tr key={m._id}>
-                <td scope="row">{m._id}</td>
-                <td>
-                <Avatar className="mr-2" name={m.name} size="45" round={true} /> {m.name}</td>
+                <td style={{'textAlign': 'left'}}>{m._id}</td>
+                <td style={{'textAlign': 'left'}}>
+                  <Avatar className="mr-2" name={m.name} size="45" round={true} /> {m.name}</td>
                 <td>
                   <Button type="btn btn-success rounded-circle"  onClick={() => viewDetail(m._id)}>
                     <ViewIcon />
