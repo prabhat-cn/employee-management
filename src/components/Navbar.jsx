@@ -2,13 +2,13 @@ import React, {useState} from 'react';
 import { Link } from "react-router-dom";
 import 'antd/dist/antd.css';
 import { Menu } from 'antd';
-import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
+import { IdcardFilled, UserOutlined, LogoutOutlined } from '@ant-design/icons';
 
 const { SubMenu } = Menu;
 
 const Navbar = () => {
 
-    const [current, setState] = useState('mail');
+    const [current, setState] = useState('department');
 
     const handleClick = (e) => {
       console.log('click ', e);
@@ -25,13 +25,13 @@ const Navbar = () => {
         <div className="container">
             <div className="row">
               <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
-                <Menu.Item key="mail" icon={<MailOutlined />}>
+                <Menu.Item key="department" icon={<IdcardFilled />}>
                   <Link to='/department'>Depertment</Link>
                 </Menu.Item>
-                <Menu.Item key="mail" icon={<MailOutlined />}>
+                <Menu.Item key="employee" icon={<UserOutlined />}>
                   <Link to='/employee'>Employee</Link> 
                 </Menu.Item>
-                <Menu.Item key="logout" icon={<MailOutlined />}>
+                <Menu.Item key="logout" icon={<LogoutOutlined />}>
                   <Link onClick={(e) => makeLogout(e)}>Logout</Link> 
                 </Menu.Item>
               </Menu>
