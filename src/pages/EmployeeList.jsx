@@ -25,8 +25,13 @@ const EmployeeList = () => {
   const [department, setDepartment] = useState([]);
   const [editvalue,setEditvalues] = useState({});
 
+  // for add employee
+  const [isThirdModalVisible, setIsThirdModalVisible] = useState(false);
+  const [addSubmitted, setAddSubmitted] = useState(false);
+  const [addValue, setAddValue] = useState({});
+
   // functions to build form returned by useForm() hook
-  const { register, handleSubmit, watch, reset,  formState: { errors } } = useForm();
+  const { register, handleSubmit, reset,  formState: { errors } } = useForm();
 
 
   const getEmployee = async () => {
@@ -87,6 +92,14 @@ const EmployeeList = () => {
     setIsSecondModalVisible(false);
   };
 
+  const handleAddOk = () => {
+    setIsThirdModalVisible(false);
+  };
+
+  const handleAddCancel = () => {
+    setIsThirdModalVisible(false);
+  };
+
   const editSubmit = (e) => {
     saveEdit({name: editvalue.name, department: editvalue.department, id: editvalue._id});
   };
@@ -137,6 +150,35 @@ const EmployeeList = () => {
     setIsSecondModalVisible(true);
   }
 
+
+  // add data
+  const saveAdd = (addData) => {
+    API.post(
+      `/employee`, 
+      {name: addData.name, department: addData.department}
+    ).then((data) => {
+      notification.success({
+        message: 'Success',
+        description:
+          'Employee is added successfully',
+      });
+      setIsThirdModalVisible(false);
+      getEmployee();
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
+  const addSubmit = (e) => {
+    e.preventDefault()
+    saveAdd({name: addValue.name, department: addValue.department, id: addValue._id});
+  };
+  const addEmployeeData = (add) => {
+    console.log('add', add);
+    setAddValue(add);
+    setIsThirdModalVisible(true);
+  }
+
   useEffect(() => {
     getDepartments();
     getEmployee();
@@ -149,12 +191,48 @@ const EmployeeList = () => {
         <h3>{singleEmployee.name}</h3>
       </Modal>
 
+      <Modal title="Add Employee" visible={isThirdModalVisible} onOk={handleAddOk} onCancel={handleAddCancel}>
+        <form id="add" onSubmit={addSubmit}>
+          <div className="row">
+          {addSubmitted && 
+          <Alert variant="success">
+          <div className='success-message' style={{textAlign: "center"}}>Success! Employee Added</div>
+          </Alert>
+          
+          }
+            <div className="form-group">
+
+              <label>Name</label>
+              <input type="text" className="form-control" name="name" id="name" placeholder="Name" value={addValue.name}
+              onChange={e=>setAddValue({...addValue,name:e.target.value})}
+              />
+            </div>
+            <div className="form-group">
+              <label>Department</label>
+              <select className="form-control"
+              onChange={e=>setAddValue({...addValue,department:e.target.value})}>
+                <option value="">Select option</option>
+                {
+                  department && department.map((dept,i)=>(
+                    <option value={dept._id} key={i} selected={ addValue.department === dept._id} >{dept.name}</option>
+                  ))
+                }
+
+              </select>
+            </div>
+            <div className="form-group">
+              <button type="submit" id="form-submit" className="btn btn-primary btn-block">Save</button>
+            </div>
+          </div>
+        </form>
+      </Modal>
+
       <Modal title="Edit Employee" visible={isSecondModalVisible} onOk={handleEditOk} onCancel={handleEditCancel}>
-        <form id="contact" onSubmit={handleSubmit(editSubmit)}>
+        <form id="edit" onSubmit={handleSubmit(editSubmit)}>
           <div className="row">
           {submitted && 
           <Alert variant="success">
-          <div className='success-message' style={{textAlign: "center"}}>Success! Thank you for your response</div>
+          <div className='success-message' style={{textAlign: "center"}}>Success! Employee saved</div>
           </Alert>
           
           }
@@ -224,7 +302,7 @@ const EmployeeList = () => {
             </form> 
           </div>
           <div className="col-md-3">
-            <Button type="primary" icon={<PlusCircleOutlined />}>
+            <Button type="primary" icon={<PlusCircleOutlined />}  onClick={(add) => addEmployeeData(add)}>
               Add Employee
             </Button>
           </div>
