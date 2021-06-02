@@ -146,7 +146,7 @@ const EmployeeList = () => {
   return (
     <>
       <Modal title="View Employee" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <h2>{singleEmployee.name}</h2>
+        <h3>{singleEmployee.name}</h3>
       </Modal>
 
       <Modal title="Edit Employee" visible={isSecondModalVisible} onOk={handleEditOk} onCancel={handleEditCancel}>
