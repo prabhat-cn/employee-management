@@ -2,7 +2,8 @@
 import React, {useState} from 'react'
 import {Link} from 'react-router-dom'
 import { useForm } from "react-hook-form";
-import { Alert } from 'react-bootstrap';
+import { Alert } from 'antd';
+// import { Alert } from 'react-bootstrap';
 import showPwdImg from '../../assets/eye-slash-solid.svg';
 import hidePwdImg from '../../assets/eye-solid.svg';
 
@@ -20,7 +21,7 @@ const LoginForm = () => {
     const loginSubmit = (loginData) => {
         API.post('/loginasadmin', loginData)
             .then((response) => {
-                console.log(response);
+                // console.log(response);
                 setError('');
                 setSubmitted(true);
                 reset();
@@ -57,14 +58,10 @@ const LoginForm = () => {
             <div className="auth-inner">
                 <form id="login" onSubmit={handleSubmit(onSubmit)}>
                 {submitted && 
-                    <Alert variant="success">
-                    <div className='success-message' style={{textAlign: "center"}}>Success! Thank you for your response</div>
-                    </Alert>
+                    <Alert message="Login successfully" type="success" showIcon />
                 }
                 {error !== '' && 
-                    <Alert variant="danger">
-                    <div className='danger-message' style={{textAlign: "center"}}>{error}</div>
-                    </Alert>
+                    <Alert message="Login failed" type="error" showIcon />
                 }
                     <h3>Sign In</h3>
 

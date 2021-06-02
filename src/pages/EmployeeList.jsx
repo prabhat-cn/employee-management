@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react'
 import { useForm } from "react-hook-form";
-import { Button, Modal, notification } from 'antd';
+import { Button, Modal, notification, Alert, Space } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import Avatar from 'react-avatar'
 import API from '../api';
-import { Alert } from 'react-bootstrap';
+// import { Alert } from 'react-bootstrap';
 import {ViewIcon, EditIcon, DeleteIcon} from '../constant/icons'
 
 
@@ -122,7 +122,7 @@ const EmployeeList = () => {
   }
 
   const makeDelete = (delID) => {
-    if(window.confirm('Are you want to delete?')){
+    if(window.confirm('Do you want to delete?')){
       API.delete(`/employee/${delID}`).then((data) => {
         notification.success({
           message: 'Success',
@@ -195,9 +195,12 @@ const EmployeeList = () => {
         <form id="add" onSubmit={addSubmit}>
           <div className="row">
           {addSubmitted && 
-          <Alert variant="success">
-          <div className='success-message' style={{textAlign: "center"}}>Success! Employee Added</div>
-          </Alert>
+            <Alert
+              message="Success!"
+              description="Employee Added"
+              type="success"
+              showIcon
+            />
           
           }
             <div className="form-group">
