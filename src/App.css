@@ -99,7 +99,9 @@ body, html, .App, #root, .auth-wrapper {
   padding-bottom: 30px;
 }
 
-
+.form-group {
+  margin-bottom: 15px;
+}
 
 
 

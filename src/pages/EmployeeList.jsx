@@ -187,7 +187,7 @@ const EmployeeList = () => {
                 {errors.process && <span style={{color: 'red'}}>Select any one</span>}
             </div>
             <div className="form-group">
-            <br/> <button type="submit" id="form-submit" className="btn btn-primary btn-block">Save</button>
+              <button type="submit" id="form-submit" className="btn btn-primary btn-block">Save</button>
             </div>
           </div>
         </form>
@@ -196,19 +196,16 @@ const EmployeeList = () => {
 
       <div className="container list-data">
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-4">
             <h2>Employee List</h2>
-            <Button type="primary" icon={<PlusCircleOutlined />}>
-              Add Employee
-            </Button>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-5">
           <form onSubmit={getSearch} className="search-form">
               <input 
                 class="form-control me-sm-2" 
                 placeholder="Search department"
                 style={{
-                  height: "40px",
+                  height: "35px",
                   display: "initial",
                   padding: "0 5px", 
                   width: "70%", 
@@ -221,11 +218,16 @@ const EmployeeList = () => {
 
               <button class="btn btn-primary my-2 my-sm-0" 
               style={{
-                height: "40px",
+                height: "35px",
                 padding: "0 5px",
                 width: "20%",
               }} type="submit">Reset</button>
             </form> 
+          </div>
+          <div className="col-md-3">
+            <Button type="primary" icon={<PlusCircleOutlined />}>
+              Add Employee
+            </Button>
           </div>
         </div>
         <table className="table">

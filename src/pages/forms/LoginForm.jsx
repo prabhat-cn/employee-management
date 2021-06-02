@@ -102,14 +102,17 @@ const LoginForm = () => {
                         </div>
                         {errors.remember && <span style={{color: 'red'}}>Required</span>}
                     </div> */}
-
-                    <button type="submit" className="btn btn-primary btn-block">Submit</button>
+                    <div className="form-group">
+                        <button type="submit" className="btn btn-primary btn-block">Submit</button>
+                    </div>
+                    <div className="form-group">
                     <p className="forgot-password text-left display_sys">
                         Have not account <Link to="/register">register?</Link>
                     </p> &nbsp;&nbsp;
                     <p className="forgot-password text-right display_sys">
                         Forgot <Link to="/forgetpass">password?</Link>
                     </p>
+                    </div>
                 </form>
             </div>
             <style>{eyeToggle}</style>
