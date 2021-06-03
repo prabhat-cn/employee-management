@@ -32,7 +32,6 @@ const EmployeeList = () => {
   const [addValue, setAddValue] = useState({});
 
   // functions to build form returned by useForm() hook
-  const { register, handleSubmit, reset,  formState: { errors } } = useForm();
 
 
   const getEmployee = async () => {
@@ -104,6 +103,7 @@ const EmployeeList = () => {
 
   // Edit data
   const editSubmit = (e) => {
+    e.preventDefault();
     saveEdit({name: editvalue.name, department: editvalue.department, id: editvalue._id});
   };
   const saveEdit = (editData) => {
@@ -237,7 +237,7 @@ const EmployeeList = () => {
       </Modal>
 
       <Modal title="Edit Employee" visible={isSecondModalVisible} onOk={handleEditOk} onCancel={handleEditCancel}>
-        <form id="edit" onSubmit={handleSubmit(editSubmit)}>
+        <form id="edit" onSubmit={(editSubmit)}>
           <div className="row">
             {submitted && 
               <Alert variant="success">
@@ -248,16 +248,11 @@ const EmployeeList = () => {
               <label>Name</label>
               <input type="text" className="form-control" name="name" id="name" placeholder="Name" value={editvalue.name}
               onChange={e=>setEditvalues({...editvalue,name:e.target.value})}
-              {...register("name", { required: true, minLength: 3, maxLength: 20})} 
               />
-
-              { errors.name?.type === "required" && <span style={{color: 'red'}}>First name required</span> }
-              { errors.name?.type === "minLength" && <span style={{color: 'red'}}>Minimum length is 3 letters</span> }
-              { errors.name?.type === "maxLength" && <span style={{color: 'red'}}>Maximum length is 20 letters</span> }
             </div>
             <div className="form-group">
               <label>Department</label>
-              <select className="form-control" name="process" {...register("process", { required: true})} 
+              <select className="form-control" name="process"
               onChange={e=>setEditvalues({...editvalue,department:e.target.value})}>
                 <option value="">Select option</option>
                 {
@@ -265,9 +260,7 @@ const EmployeeList = () => {
                     <option value={dept._id} key={i} selected={ editvalue.department === dept._id} >{dept.name}</option>
                   ))
                 }
-
               </select>
-              {errors.process && <span style={{color: 'red'}}>Select any one</span>}
             </div>
             <div className="form-group">
               <button type="submit" id="form-submit" className="btn btn-primary btn-block">Save</button>

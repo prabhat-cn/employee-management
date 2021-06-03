@@ -18,9 +18,6 @@ const DepartmentList = () => {
   const[search, setSearch] = useState("");
   const[query, setQuery] = useState('name');
 
-  // populate employee
-  const [employeeData, setEmployeeData] = useState([]);
-
   // for add data
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [addSubmitted, setAddSubmitted] = useState(false);
