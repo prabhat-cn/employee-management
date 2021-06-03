@@ -10,11 +10,16 @@ import {EditIcon, DeleteIcon} from '../constant/icons'
 const DepartmentList = () => {
 
   const [department, setDepartment] = useState([]);
+  // const [countdepartment, setDepartment] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   // Search
   const[search, setSearch] = useState("");
-  const[query, setQuery] = useState('name')
+  const[query, setQuery] = useState('name');
+
+  // populate employee
+  const [employeeData, setEmployeeData] = useState([]);
 
   // for add data
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
@@ -31,14 +36,36 @@ const DepartmentList = () => {
   const getDepartment = async () =>{
     setLoading(true);
     try{
-    const deptData = await API.get('/department');
-    setDepartment(deptData.data.data);
-    setLoading(false);
+      const deptData = await API.get('/department');
+      setDepartment(deptData.data.data);
+      // no. of employee based on department start
+      const setDeptData = deptData.data.data;
+      const empData = await API.get('/employee?populate=department');
+      let dept = empData.data.data;
+      let a = dept.map(obj=>{
+        return obj.department.name 
+      })
+      let getDept = a.reduce((b,c)=>((b[b.findIndex(d=>d.el===c)]||b[b.push({el:c,count:0})-1]).count++,b),[]);
+      let b= [];
+      const selectedRows= getDept.filter(function(newData){
+        return !setDeptData.find(function(objId){
+            if(objId.name === newData.el){
+            let newObj ={};
+            newObj.name = newData.el
+            newObj.count = newData.count
+            newObj._id = objId._id
+            b.push(newObj)
+            return newObj
+          }
+        });
+      });
+      setDepartment(b);
+      // no. of employee based on department end
+      setLoading(false);
     }catch(error){
       console.log(error.message);
     }
   }
-
 
   const updateSearch = (evt) => {
     setSearch(evt.target.value);
@@ -64,9 +91,8 @@ const DepartmentList = () => {
 
   const saveAdd = (addData) => {
     API.post(
-      `/department  `, 
-      {name: addData.name}
-    ).then((data) => {
+      `/department`, {name: addData.name}
+    ).then((response) => {
       notification.success({
         message: 'Success',
         description:
@@ -75,7 +101,18 @@ const DepartmentList = () => {
       setIsAddModalVisible(false);
       getDepartment();
     }).catch((err) => {
-      console.log(err);
+      console.log(err.response);
+      const {status, data} = err.response
+      setAddSubmitted(false)
+      notification.error({
+        message: 'Error',
+        description:
+          'Department added failed',
+      });
+      if(status === 400){
+        setError(data.message.text)
+      }
+      
     })
   }
 
@@ -120,12 +157,12 @@ const DepartmentList = () => {
     saveEdit({name: editValue.name, id: editValue._id});
   };
   const editDepartmentData = (edit) => {
-    console.log('add', edit);
+    console.log('edit', edit);
     setEditValue(edit);
     setIsEditModalVisible(true);
   }
 
-  // Delete
+  // Delete data
   const makeDelete = (delID) => {
     if(window.confirm('Do you want to delete?')){
       API.delete(`/department/${delID}`).then((data) => {
@@ -143,6 +180,7 @@ const DepartmentList = () => {
 
   useEffect(() => {
     getDepartment();
+    // getEmployeeData();
   }, [query]);
   
   return (
@@ -235,6 +273,7 @@ const DepartmentList = () => {
               <th scope="col">#Sl.No</th>
               <th scope="col">Id</th>
               <th scope="col">Department Name</th>
+              <th scope="col">Number of Employee</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -256,6 +295,7 @@ const DepartmentList = () => {
                 <td style={{'textAlign': 'left'}}>{m._id}</td>
                 <td style={{'textAlign': 'left'}}>
                 <Avatar className="mr-2" name={m.name} size="45" round={true} /> {m.name}</td>
+                <td style={{'textAlign': 'center'}}>{m.count}</td>
                 <td>
                   <Button type="primary rounded-circle" onClick={() => editDepartmentData(m)}>
                     <EditIcon />
