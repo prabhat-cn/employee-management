@@ -49,7 +49,7 @@ const EmployeeList = () => {
 
   const getEmployeeId = async (id) => {
     try{
-      const deptData = await API.get(`/employee/${id}`);
+      const deptData = await API.get(`/employee/${id}?populate=department`);
       setSingleEmployee(deptData.data.data);
       showModal();
     }catch(error){
@@ -102,10 +102,10 @@ const EmployeeList = () => {
     setIsThirdModalVisible(false);
   };
 
+  // Edit data
   const editSubmit = (e) => {
     saveEdit({name: editvalue.name, department: editvalue.department, id: editvalue._id});
   };
-
   const saveEdit = (editData) => {
     API.put(
       `/employee/${editData.id}`, 
@@ -121,21 +121,6 @@ const EmployeeList = () => {
     }).catch((err) => {
       console.log(err);
     })
-  }
-
-  const makeDelete = (delID) => {
-    if(window.confirm('Do you want to delete?')){
-      API.delete(`/employee/${delID}`).then((data) => {
-        notification.success({
-          message: 'Success',
-          description:
-            'Employee deleted successfully',
-        });
-        getEmployee();
-      }).catch((err) => {
-        console.log(err);
-      })
-    }
   }
 
   const getDepartments = async (id) => {
@@ -186,6 +171,22 @@ const EmployeeList = () => {
     setIsThirdModalVisible(true);
   }
 
+  // delete
+  const makeDelete = (delID) => {
+    if(window.confirm('Do you want to delete?')){
+      API.delete(`/employee/${delID}`).then((data) => {
+        notification.success({
+          message: 'Success',
+          description:
+            'Employee deleted successfully',
+        });
+        getEmployee();
+      }).catch((err) => {
+        console.log(err);
+      })
+    }
+  }
+
   useEffect(() => {
     getDepartments();
     getEmployee();
@@ -195,7 +196,8 @@ const EmployeeList = () => {
   return (
     <>
       <Modal title="View Employee" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <h3>{singleEmployee.name}</h3>
+        <h4>{singleEmployee.name}</h4>
+        {/* <p>{singleEmployee.department.name}</p> */}
       </Modal>
 
       <Modal title="Add Employee" visible={isThirdModalVisible} onOk={handleAddOk} onCancel={handleAddCancel}>
@@ -276,12 +278,12 @@ const EmployeeList = () => {
 
 
       <div className="container list-data">
-        <div className="row">
+        <div className="row line-height-top">
           <div className="col-md-4">
-            <h3>Employee List</h3>
+            <h4>Employee List</h4>
           </div>
           <div className="col-md-5">
-          <form onSubmit={getSearch} className="search-form">
+            <form onSubmit={getSearch} className="search-form">
               <input 
                 class="form-control me-sm-2" 
                 placeholder="Search department"
@@ -306,9 +308,9 @@ const EmployeeList = () => {
             </form> 
           </div>
           <div className="col-md-3">
-            {/* <Button type="primary" icon={<PlusCircleOutlined />}  onClick={(add) => addEmployeeData(add)}>
+            <Button type="primary" icon={<PlusCircleOutlined />}  onClick={(add) => addEmployeeData(add)}>
               Add Employee
-            </Button> */}
+            </Button>
           </div>
         </div>
         <table className="table">

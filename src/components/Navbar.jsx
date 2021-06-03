@@ -8,7 +8,7 @@ const { SubMenu } = Menu;
 
 const Navbar = () => {
 
-    const [current, setState] = useState('department');
+    const [current, setState] = useState('card');
 
     const handleClick = (e) => {
       console.log('click ', e);
@@ -25,10 +25,10 @@ const Navbar = () => {
         <div className="container">
             <div className="row">
               <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
-                <Menu.Item key="department" icon={<IdcardFilled />}>
+                <Menu.Item key="card" icon={<IdcardFilled />}>
                   <Link to='/department'>Depertment</Link>
                 </Menu.Item>
-                <Menu.Item key="employee" icon={<UserOutlined />}>
+                <Menu.Item key="user" icon={<UserOutlined />}>
                   <Link to='/employee'>Employee</Link> 
                 </Menu.Item>
                 <Menu.Item key="logout" icon={<LogoutOutlined />}>

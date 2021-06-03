@@ -103,7 +103,9 @@ body, html, .App, #root, .auth-wrapper {
   margin-bottom: 15px;
 }
 
-
+.line-height-top {
+  margin-bottom: 15px;
+}
 
 
 

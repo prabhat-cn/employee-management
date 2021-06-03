@@ -3,14 +3,16 @@ import Avatar from 'react-avatar'
 import { Button, Modal, notification, Alert, Space } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import API from '../api';
-import {EditIcon, DeleteIcon} from '../constant/icons'
+import {ViewIcon, EditIcon, DeleteIcon} from '../constant/icons'
 
 
 
 const DepartmentList = () => {
 
   const [department, setDepartment] = useState([]);
+  const [singleDepartment, setSingleDepartment] = useState({name: '', _id: ''});
   const [loading, setLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   // Search
   const[search, setSearch] = useState("");
@@ -39,6 +41,31 @@ const DepartmentList = () => {
     }
   }
 
+  const getDepartmentId = async (id) => {
+    try{
+      const deptData = await API.get(`/department/${id}`);
+      setSingleDepartment(deptData.data.data);
+      showModal();
+    }catch(error){
+      console.log(error.message);
+    }
+  };
+
+  const viewDetail = (id) => {
+    getDepartmentId(id);
+  }
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const updateSearch = (evt) => {
     setSearch(evt.target.value);
@@ -147,6 +174,10 @@ const DepartmentList = () => {
   
   return (
     <>
+      <Modal title="View Department" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <h2>{singleDepartment.name}</h2>
+      </Modal>
+
       <Modal title="Add Department" visible={isAddModalVisible} onOk={handleAddOk} onCancel={handleAddCancel}>
         <form id="add" onSubmit={addSubmit}>
           <div className="row">
@@ -257,6 +288,9 @@ const DepartmentList = () => {
                 <td style={{'textAlign': 'left'}}>
                 <Avatar className="mr-2" name={m.name} size="45" round={true} /> {m.name}</td>
                 <td>
+                  <Button type="btn btn-success rounded-circle"  onClick={() => viewDetail(m._id)}>
+                    <ViewIcon />
+                  </Button>&nbsp;
                   <Button type="primary rounded-circle" onClick={() => editDepartmentData(m)}>
                     <EditIcon />
                   </Button>&nbsp;
