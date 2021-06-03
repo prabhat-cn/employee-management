@@ -4,9 +4,9 @@ import { Button, Modal, notification, Alert, Space } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import Avatar from 'react-avatar'
 import {find} from 'lodash'
-import API from '../api';
+import API from '../../api';
 // import { Alert } from 'react-bootstrap';
-import {ViewIcon, EditIcon, DeleteIcon} from '../constant/icons'
+import {ViewIcon, EditIcon, DeleteIcon} from '../../constant/icons'
 
 
 const EmployeeList = () => {
