@@ -24,7 +24,7 @@ const EmployeeList = () => {
   const [isSecondModalVisible, setIsSecondModalVisible] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [department, setDepartment] = useState([]);
-  const [editvalue,setEditvalues] = useState({});
+  const [editvalue, setEditvalues] = useState({});
 
   // for add employee
   const [isThirdModalVisible, setIsThirdModalVisible] = useState(false);
@@ -40,7 +40,6 @@ const EmployeeList = () => {
     try{
       // department respect employee
       const deptData = await API.get('/employee?populate=department');
-      console.log(deptData.data.data)
       setEmployee(deptData.data.data);
       setLoading(false);
     }catch(error){
@@ -149,7 +148,12 @@ const EmployeeList = () => {
   };
 
   const editEmployee = (m) => {
-    setEditvalues(m);
+    const modifiedData = {
+      _id: m._id,
+      name: m.name,
+      department: m.department._id,
+    }
+    setEditvalues(modifiedData);
     setIsSecondModalVisible(true);
   }
 
@@ -197,17 +201,15 @@ const EmployeeList = () => {
       <Modal title="Add Employee" visible={isThirdModalVisible} onOk={handleAddOk} onCancel={handleAddCancel}>
         <form id="add" onSubmit={addSubmit}>
           <div className="row">
-          {addSubmitted && 
-            <Alert
-              message="Success!"
-              description="Employee Added"
-              type="success"
-              showIcon
-            />
-          
-          }
+            {addSubmitted && 
+              <Alert
+                message="Success!"
+                description="Employee Added"
+                type="success"
+                showIcon
+              />
+            }
             <div className="form-group">
-
               <label>Name</label>
               <input type="text" className="form-control" name="name" id="name" placeholder="Name" value={addValue.name}
               onChange={e=>setAddValue({...addValue,name:e.target.value})}
@@ -223,7 +225,6 @@ const EmployeeList = () => {
                     <option value={dept._id} key={i} selected={ addValue.department === dept._id} >{dept.name}</option>
                   ))
                 }
-
               </select>
             </div>
             <div className="form-group">
@@ -236,15 +237,12 @@ const EmployeeList = () => {
       <Modal title="Edit Employee" visible={isSecondModalVisible} onOk={handleEditOk} onCancel={handleEditCancel}>
         <form id="edit" onSubmit={handleSubmit(editSubmit)}>
           <div className="row">
-          {submitted && 
-          <Alert variant="success">
-          <div className='success-message' style={{textAlign: "center"}}>Success! Employee saved</div>
-          </Alert>
-          
-          }
+            {submitted && 
+              <Alert variant="success">
+                <div className='success-message' style={{textAlign: "center"}}>Success! Employee saved</div>
+              </Alert>
+            }
             <div className="form-group">
-              <input type="hidden" className="form-control" name="id" id="id" value={editvalue._id} />
-
               <label>Name</label>
               <input type="text" className="form-control" name="name" id="name" placeholder="Name" value={editvalue.name}
               onChange={e=>setEditvalues({...editvalue,name:e.target.value})}
@@ -308,9 +306,9 @@ const EmployeeList = () => {
             </form> 
           </div>
           <div className="col-md-3">
-            <Button type="primary" icon={<PlusCircleOutlined />}  onClick={(add) => addEmployeeData(add)}>
+            {/* <Button type="primary" icon={<PlusCircleOutlined />}  onClick={(add) => addEmployeeData(add)}>
               Add Employee
-            </Button>
+            </Button> */}
           </div>
         </div>
         <table className="table">
