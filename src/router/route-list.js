@@ -28,11 +28,17 @@ const EmployeeList = Loadable({
     loading: Loader,
 });
 
+const ViewEmployee = Loadable({
+    loader: () => import('../pages/ViewEmployee'),
+    loading: Loader,
+});
+
 export {
     LoginForm,
     ForgetPassword,
     RegisterForm,
     DepartmentList,
-    EmployeeList
+    EmployeeList,
+    ViewEmployee
 };
   

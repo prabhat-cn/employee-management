@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import {Link} from 'react-router-dom'
 import { useForm } from "react-hook-form";
 import { Button, Modal, notification, Alert, Space } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
@@ -6,7 +7,7 @@ import Avatar from 'react-avatar'
 import {find} from 'lodash'
 import API from '../api';
 // import { Alert } from 'react-bootstrap';
-import {ViewIcon, EditIcon, DeleteIcon} from '../constant/icons'
+import {ViewIcon, EditIcon, DeleteIcon, NextIcon} from '../constant/icons'
 
 
 const EmployeeList = () => {
@@ -197,7 +198,7 @@ const EmployeeList = () => {
     <>
       <Modal title="View Employee" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <h4>{singleEmployee.name}</h4>
-        {/* <p>{singleEmployee.department.name}</p> */}
+        <p>{singleEmployee?.department?.name}</p>
       </Modal>
 
       <Modal title="Add Employee" visible={isThirdModalVisible} onOk={handleAddOk} onCancel={handleAddCancel}>
@@ -334,6 +335,11 @@ const EmployeeList = () => {
                 <td style={{'textAlign': 'left'}}>
                   <Avatar className="mr-2" name={m.name} size="45" round={true} /> {m.name}</td>
                 <td>
+                  <Button type="btn btn-info rounded-circle">
+                    <Link to={`/viewemployee/${m._id}`}>
+                      <NextIcon />
+                    </Link>
+                  </Button>&nbsp;
                   <Button type="btn btn-success rounded-circle"  onClick={() => viewDetail(m._id)}>
                     <ViewIcon />
                   </Button>&nbsp;

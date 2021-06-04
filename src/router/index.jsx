@@ -7,7 +7,8 @@ import {
     ForgetPassword,
     RegisterForm,
     DepartmentList,
-    EmployeeList
+    EmployeeList,
+    ViewEmployee
   } from './route-list';
   
 
@@ -47,6 +48,7 @@ const Routes = () => {
                 {/* only private */}
                 <PrivateRoute exact auth={authState} path="/department" component={DepartmentList} />
                 <PrivateRoute exact auth={authState} path="/employee" component={EmployeeList} />
+                <PrivateRoute exact auth={authState} path="/viewemployee/:id" component={ViewEmployee} />
 
                 {/* condonation */}
                 {authState ? (
