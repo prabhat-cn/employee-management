@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import 'antd/dist/antd.css';
 import { Menu } from 'antd';
 import { IdcardFilled, UserOutlined, LogoutOutlined } from '@ant-design/icons';
@@ -9,6 +9,9 @@ const { SubMenu } = Menu;
 const Navbar = () => {
 
     const [current, setState] = useState('card');
+    const location = useLocation();
+    const { pathname } = location;
+    const splitLocation = pathname.split("/");
 
     const handleClick = (e) => {
       console.log('click ', e);
@@ -25,13 +28,13 @@ const Navbar = () => {
         <div className="container">
             <div className="row">
               <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
-                <Menu.Item key="card" icon={<IdcardFilled />}>
+                <Menu.Item key="card" icon={<IdcardFilled />} className={splitLocation[1] === "department" ? "active" : ""}>
                   <Link to='/department'>Depertment</Link>
                 </Menu.Item>
-                <Menu.Item key="user" icon={<UserOutlined />}>
+                <Menu.Item key="user" icon={<UserOutlined />} className={splitLocation[1] === "employee" ? "active" : ""}>
                   <Link to='/employee'>Employee</Link> 
                 </Menu.Item>
-                <Menu.Item key="logout" icon={<LogoutOutlined />}>
+                <Menu.Item key="logout" icon={<LogoutOutlined />} >
                   <Link onClick={(e) => makeLogout(e)}>Logout</Link> 
                 </Menu.Item>
               </Menu>
@@ -41,3 +44,4 @@ const Navbar = () => {
 }
 
 export default Navbar;
+
