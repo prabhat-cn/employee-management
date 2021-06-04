@@ -2,8 +2,8 @@ import React, {useState, useEffect} from 'react'
 import Avatar from 'react-avatar'
 import { Button, Modal, notification, Alert, Space } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import API from '../api';
-import {EditIcon, DeleteIcon} from '../constant/icons'
+import API from '../../api';
+import {EditIcon, DeleteIcon} from '../../constant/icons'
 
 
 
@@ -38,11 +38,11 @@ const DepartmentList = () => {
       // no. of employee based on department start
       const setDeptData = deptData.data.data;
       const empData = await API.get('/employee?populate=department');
-      let deptWiseEmp = empData.data.data;
-      let mapCount = deptWiseEmp.map(obj=>{
+      let dept = empData.data.data;
+      let a = dept.map(obj=>{
         return obj.department.name 
       })
-      let getDept = mapCount.reduce((b,c)=>((b[b.findIndex(d=>d.el===c)]||b[b.push({el:c,count:0})-1]).count++,b),[]);
+      let getDept = a.reduce((b,c)=>((b[b.findIndex(d=>d.el===c)]||b[b.push({el:c,count:0})-1]).count++,b),[]);
       let b= [];
       const selectedRows= getDept.filter(function(newData){
         return !setDeptData.find(function(objId){
