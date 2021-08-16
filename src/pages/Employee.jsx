@@ -7,8 +7,7 @@ const Employee = () => {
   const columns = [
     { title: "Sl.No", field: "slNo" },
     { title: "Name", field: "name" },
-    { title: "Email", field: `name` },
-    { title: "Phone", field: "phone" },
+    { title: "Department", field: `departmentName` },
   ];
 
   const allEmployee = () => {
@@ -16,8 +15,18 @@ const Employee = () => {
       .then((res) => {
         console.log("allEmployee", res);
         const mapData = res.data.data.map((value, i) => {
-          return { ...value, ...{ slNo: i + 1 } };
+          return {
+            id: value._id,
+            name: value.name,
+            departmentName: value?.department?.name,
+            departmentId: value?.department?._id,
+            slNo: i + 1,
+          };
         });
+
+        // const mapData = res.data.data.map((value, i) => {
+        //   return { ...value, ...{ slNo: i + 1 } };
+        // });
         setEmployeeData(mapData);
       })
       .catch((err) => {
