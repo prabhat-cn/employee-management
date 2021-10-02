@@ -29,6 +29,7 @@ const DepartmentList = () => {
     setLoading(true);
     try {
       const deptData = await API.get("/department");
+      console.log("deptData", deptData);
       setDepartment(deptData.data.data);
       // no. of employee based on department start
       const setDeptData = deptData.data.data;
