@@ -1,27 +1,25 @@
-import React, {useState, useEffect} from 'react'
-import {Link} from 'react-router-dom'
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Button, Modal, notification, Alert, Space } from 'antd';
-import { PlusCircleOutlined } from '@ant-design/icons';
-import Avatar from 'react-avatar'
-import {find} from 'lodash'
-import API from '../api';
+import { Button, Modal, notification, Alert, Space } from "antd";
+import { PlusCircleOutlined } from "@ant-design/icons";
+import Avatar from "react-avatar";
+import { find } from "lodash";
+import API from "../api";
 // import { Alert } from 'react-bootstrap';
-import {ViewIcon, EditIcon, DeleteIcon, NextIcon} from '../constant/icons'
-
+import { ViewIcon, EditIcon, DeleteIcon, NextIcon } from "../constant/icons";
 
 const EmployeeList = () => {
-
   const [employee, setEmployee] = useState([]);
-  const [singleEmployee, setSingleEmployee] = useState({name: '', _id: ''});
+  const [singleEmployee, setSingleEmployee] = useState({ name: "", _id: "" });
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   // Search
-  const[search, setSearch] = useState("");
-  const[query, setQuery] = useState('name');
+  const [search, setSearch] = useState("");
+  const [query, setQuery] = useState("name");
 
-  // for edit form  
+  // for edit form
   const [isSecondModalVisible, setIsSecondModalVisible] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [department, setDepartment] = useState([]);
@@ -34,33 +32,31 @@ const EmployeeList = () => {
 
   // functions to build form returned by useForm() hook
 
-
   const getEmployee = async () => {
     setLoading(true);
-    try{
+    try {
       // department respect employee
-      const deptData = await API.get('/employee?populate=department');
+      const deptData = await API.get("/employee?populate=department");
       setEmployee(deptData.data.data);
       setLoading(false);
-    }catch(error){
+    } catch (error) {
       console.log(error.message);
     }
   };
 
   const getEmployeeId = async (id) => {
-    try{
+    try {
       const deptData = await API.get(`/employee/${id}?populate=department`);
       setSingleEmployee(deptData.data.data);
       showModal();
-    }catch(error){
+    } catch (error) {
       console.log(error.message);
     }
   };
 
-
   const viewDetail = (id) => {
     getEmployeeId(id);
-  }
+  };
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -82,8 +78,7 @@ const EmployeeList = () => {
     e.preventDefault();
     setQuery(search);
     // to reset after search button click
-    setSearch('');
-    
+    setSearch("");
   };
 
   const handleEditOk = () => {
@@ -105,30 +100,35 @@ const EmployeeList = () => {
   // Edit data
   const editSubmit = (e) => {
     e.preventDefault();
-    saveEdit({name: editvalue.name, department: editvalue.department, id: editvalue._id});
+    saveEdit({
+      name: editvalue.name,
+      department: editvalue.department,
+      id: editvalue._id,
+    });
   };
   const saveEdit = (editData) => {
-    API.put(
-      `/employee/${editData.id}`, 
-      {name: editData.name, department: editData.department}
-    ).then((data) => {
-      notification.success({
-        message: 'Success',
-        description:
-          'Employee is updated successfully',
-      });
-      setIsSecondModalVisible(false);
-      getEmployee();
-    }).catch((err) => {
-      console.log(err);
+    API.put(`/employee/${editData.id}`, {
+      name: editData.name,
+      department: editData.department,
     })
-  }
+      .then((data) => {
+        notification.success({
+          message: "Success",
+          description: "Employee is updated successfully",
+        });
+        setIsSecondModalVisible(false);
+        getEmployee();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const getDepartments = async (id) => {
-    try{
+    try {
       const deptDatas = await API.get(`/department`);
       setDepartment(deptDatas.data.data);
-    }catch(error){
+    } catch (error) {
       console.log(error.message);
     }
   };
@@ -138,138 +138,208 @@ const EmployeeList = () => {
       _id: m._id,
       name: m.name,
       department: m.department._id,
-    }
+    };
     setEditvalues(modifiedData);
     setIsSecondModalVisible(true);
-  }
-
+  };
 
   // add data
   const saveAdd = (addData) => {
-    API.post(
-      `/employee`, 
-      {name: addData.name, department: addData.department}
-    ).then((data) => {
-      notification.success({
-        message: 'Success',
-        description:
-          'Employee is added successfully',
-      });
-      setIsThirdModalVisible(false);
-      getEmployee();
-    }).catch((err) => {
-      console.log(err);
+    API.post(`/employee`, {
+      name: addData.name,
+      department: addData.department,
     })
-  }
+      .then((data) => {
+        notification.success({
+          message: "Success",
+          description: "Employee is added successfully",
+        });
+        setIsThirdModalVisible(false);
+        getEmployee();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const addSubmit = (e) => {
-    e.preventDefault()
-    saveAdd({name: addValue.name, department: addValue.department, id: addValue._id});
+    e.preventDefault();
+    saveAdd({
+      name: addValue.name,
+      department: addValue.department,
+      id: addValue._id,
+    });
   };
   const addEmployeeData = (add) => {
-    console.log('add', add);
+    console.log("add", add);
     setAddValue(add);
     setIsThirdModalVisible(true);
-  }
+  };
 
   // delete
   const makeDelete = (delID) => {
-    if(window.confirm('Do you want to delete?')){
-      API.delete(`/employee/${delID}`).then((data) => {
-        notification.success({
-          message: 'Success',
-          description:
-            'Employee deleted successfully',
+    if (window.confirm("Do you want to delete?")) {
+      API.delete(`/employee/${delID}`)
+        .then((data) => {
+          notification.success({
+            message: "Success",
+            description: "Employee deleted successfully",
+          });
+          getEmployee();
+        })
+        .catch((err) => {
+          console.log(err);
         });
-        getEmployee();
-      }).catch((err) => {
-        console.log(err);
-      })
     }
-  }
+  };
 
   useEffect(() => {
     getDepartments();
     getEmployee();
-  }, [])
-
+  }, []);
 
   return (
     <>
-      <Modal title="View Employee" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      <Modal
+        title="View Employee"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
         <h4>{singleEmployee.name}</h4>
         <p>{singleEmployee?.department?.name}</p>
       </Modal>
 
-      <Modal title="Add Employee" visible={isThirdModalVisible} onOk={handleAddOk} onCancel={handleAddCancel}>
+      <Modal
+        title="Add Employee"
+        visible={isThirdModalVisible}
+        onOk={handleAddOk}
+        onCancel={handleAddCancel}
+      >
         <form id="add" onSubmit={addSubmit}>
           <div className="row">
-            {addSubmitted && 
+            {addSubmitted && (
               <Alert
                 message="Success!"
                 description="Employee Added"
                 type="success"
                 showIcon
               />
-            }
+            )}
             <div className="form-group">
               <label>Name</label>
-              <input type="text" className="form-control" name="name" id="name" placeholder="Name" value={addValue.name}
-              onChange={e=>setAddValue({...addValue,name:e.target.value})}
+              <input
+                type="text"
+                className="form-control"
+                name="name"
+                id="name"
+                placeholder="Name"
+                value={addValue.name}
+                onChange={(e) =>
+                  setAddValue({ ...addValue, name: e.target.value })
+                }
               />
             </div>
             <div className="form-group">
               <label>Department</label>
-              <select className="form-control"
-              onChange={e=>setAddValue({...addValue,department:e.target.value})}>
-                <option value="">Select option</option>
-                {
-                  department && department.map((dept,i)=>(
-                    <option value={dept._id} key={i} selected={ addValue.department === dept._id} >{dept.name}</option>
-                  ))
+              <select
+                className="form-control"
+                onChange={(e) =>
+                  setAddValue({ ...addValue, department: e.target.value })
                 }
+              >
+                <option value="">Select option</option>
+                {department &&
+                  department.map((dept, i) => (
+                    <option
+                      value={dept._id}
+                      key={i}
+                      selected={addValue.department === dept._id}
+                    >
+                      {dept.name}
+                    </option>
+                  ))}
               </select>
             </div>
             <div className="form-group">
-              <button type="submit" id="form-submit" className="btn btn-primary btn-block">Save</button>
+              <button
+                type="submit"
+                id="form-submit"
+                className="btn btn-primary btn-block"
+              >
+                Save
+              </button>
             </div>
           </div>
         </form>
       </Modal>
 
-      <Modal title="Edit Employee" visible={isSecondModalVisible} onOk={handleEditOk} onCancel={handleEditCancel}>
-        <form id="edit" onSubmit={(editSubmit)}>
+      <Modal
+        title="Edit Employee"
+        visible={isSecondModalVisible}
+        onOk={handleEditOk}
+        onCancel={handleEditCancel}
+      >
+        <form id="edit" onSubmit={editSubmit}>
           <div className="row">
-            {submitted && 
+            {submitted && (
               <Alert variant="success">
-                <div className='success-message' style={{textAlign: "center"}}>Success! Employee saved</div>
+                <div
+                  className="success-message"
+                  style={{ textAlign: "center" }}
+                >
+                  Success! Employee saved
+                </div>
               </Alert>
-            }
+            )}
             <div className="form-group">
               <label>Name</label>
-              <input type="text" className="form-control" name="name" id="name" placeholder="Name" value={editvalue.name}
-              onChange={e=>setEditvalues({...editvalue,name:e.target.value})}
+              <input
+                type="text"
+                className="form-control"
+                name="name"
+                id="name"
+                placeholder="Name"
+                value={editvalue.name}
+                onChange={(e) =>
+                  setEditvalues({ ...editvalue, name: e.target.value })
+                }
               />
             </div>
             <div className="form-group">
               <label>Department</label>
-              <select className="form-control" name="process"
-              onChange={e=>setEditvalues({...editvalue,department:e.target.value})}>
-                <option value="">Select option</option>
-                {
-                  department && department.map((dept,i)=>(
-                    <option value={dept._id} key={i} selected={ editvalue.department === dept._id} >{dept.name}</option>
-                  ))
+              <select
+                className="form-control"
+                name="process"
+                onChange={(e) =>
+                  setEditvalues({ ...editvalue, department: e.target.value })
                 }
+              >
+                <option value="">Select option</option>
+                {department &&
+                  department.map((dept, i) => (
+                    <option
+                      value={dept._id}
+                      key={i}
+                      selected={editvalue.department === dept._id}
+                    >
+                      {dept.name}
+                    </option>
+                  ))}
               </select>
             </div>
             <div className="form-group">
-              <button type="submit" id="form-submit" className="btn btn-primary btn-block">Save</button>
+              <button
+                type="submit"
+                id="form-submit"
+                className="btn btn-primary btn-block"
+              >
+                Save
+              </button>
             </div>
           </div>
         </form>
       </Modal>
-
 
       <div className="container list-data">
         <div className="row line-height-top">
@@ -278,31 +348,40 @@ const EmployeeList = () => {
           </div>
           <div className="col-md-5">
             <form onSubmit={getSearch} className="search-form">
-              <input 
-                class="form-control me-sm-2" 
+              <input
+                class="form-control me-sm-2"
                 placeholder="Search department"
                 style={{
                   height: "35px",
                   display: "initial",
-                  padding: "0 5px", 
-                  width: "70%", 
-                  fontSize:"14px"
+                  padding: "0 5px",
+                  width: "70%",
+                  fontSize: "14px",
                 }}
                 type="text"
-                value={search} 
-                onChange={updateSearch} 
+                value={search}
+                onChange={updateSearch}
               />
 
-              <button class="btn btn-primary my-2 my-sm-0" 
-              style={{
-                height: "35px",
-                padding: "0 5px",
-                width: "20%",
-              }} type="submit">Reset</button>
-            </form> 
+              <button
+                class="btn btn-primary my-2 my-sm-0"
+                style={{
+                  height: "35px",
+                  padding: "0 5px",
+                  width: "20%",
+                }}
+                type="submit"
+              >
+                Reset
+              </button>
+            </form>
           </div>
           <div className="col-md-3">
-            <Button type="primary" icon={<PlusCircleOutlined />}  onClick={(add) => addEmployeeData(add)}>
+            <Button
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              onClick={(add) => addEmployeeData(add)}
+            >
               Add Employee
             </Button>
           </div>
@@ -317,49 +396,69 @@ const EmployeeList = () => {
             </tr>
           </thead>
           <tbody>
-            {employee.filter((val) => {
-                if(search === ""){
-                    return val
+            {employee
+              .filter((val) => {
+                if (search === "") {
+                  return val;
+                } else if (
+                  val.name.toLowerCase().includes(search.toLowerCase())
+                ) {
+                  return val;
+                } else if (val.search) {
+                  return val;
                 }
-                else if(val.name.toLowerCase().includes(search.toLowerCase())){
-                    return val
-                }
-                else if(val.search){
-                    return val
-                }
-
-            }).map((m, index) => (
-              <tr key={m._id}>
-                <td style={{'textAlign': 'center'}}>{index + 1}</td>
-                <td style={{'textAlign': 'left'}}>{m.department.name}</td>
-                <td style={{'textAlign': 'left'}}>
-                  <Avatar className="mr-2" name={m.name} size="45" round={true} /> {m.name}</td>
-                <td>
-                  <Button type="btn btn-info rounded-circle">
-                    <Link to={`/viewemployee/${m._id}`}>
-                      <NextIcon />
-                    </Link>
-                  </Button>&nbsp;
-                  <Button type="btn btn-success rounded-circle"  onClick={() => viewDetail(m._id)}>
-                    <ViewIcon />
-                  </Button>&nbsp;
-                  <Button type="primary rounded-circle"  onClick={() => editEmployee(m)}>
-                    <EditIcon />
-                  </Button>&nbsp;
-                  <Button type="btn btn-danger rounded-circle" onClick={() => makeDelete(m._id)} >
-                    <DeleteIcon />
-                  </Button>
-                </td>
-              </tr>
-            ))}
-            
+              })
+              .reverse()
+              .map((m, index) => (
+                <tr key={m._id}>
+                  <td style={{ textAlign: "center" }}>{index + 1}</td>
+                  <td style={{ textAlign: "left" }}>{m.department.name}</td>
+                  <td style={{ textAlign: "left" }}>
+                    <Avatar
+                      className="mr-2"
+                      name={m.name}
+                      size="45"
+                      round={true}
+                    />{" "}
+                    {m.name}
+                  </td>
+                  <td>
+                    <Button type="btn btn-info rounded-circle">
+                      <Link to={`/viewemployee/${m._id}`}>
+                        <NextIcon />
+                      </Link>
+                    </Button>
+                    &nbsp;
+                    <Button
+                      type="btn btn-success rounded-circle"
+                      onClick={() => viewDetail(m._id)}
+                    >
+                      <ViewIcon />
+                    </Button>
+                    &nbsp;
+                    <Button
+                      type="primary rounded-circle"
+                      onClick={() => editEmployee(m)}
+                    >
+                      <EditIcon />
+                    </Button>
+                    &nbsp;
+                    <Button
+                      type="btn btn-danger rounded-circle"
+                      onClick={() => makeDelete(m._id)}
+                    >
+                      <DeleteIcon />
+                    </Button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
         <style>{deptCss}</style>
       </div>
     </>
-  )
-}
+  );
+};
 
 export default EmployeeList;
 const deptCss = `
